@@ -8,15 +8,47 @@ $(document).ready(function () {
 			localStorage.setItem(
 				"sb|sidebar-toggle",
 				$("body").hasClass("sb-sidenav-toggled")
-			);
+				);
 		});
 	}
+
+	$('.tgl_datepicker').datepicker({
+		dateFormat: "yy-mm-dd",
+		changeMonth: true,
+		changeYear: true,
+		yearRange: "-30:+00",
+		showOn: "button",
+		buttonImage: "/assets/jquery-ui/images/calendar.gif",
+		buttonImageOnly: true,
+	});
+
+	$('#kode_kecamatan').select2();
+	$('#kode_kelurahan').select2();
+
 });
+
+
+pilihKecamatan =  function() {
+	let kode_kecamatan = $('#kode_kecamatan').val();
+	let url = "anggota/pilihKecamatan";
+	loading();
+	$.ajax({
+		type:"POST",
+		data:{kode_kecamatan: kode_kecamatan},
+		url: base_url + url,
+		success: function(data) {
+			var resp = eval("(" + data + ")");
+			clearLoading();
+			$('#tukCmbKel').html(resp);
+			$('#kode_kelurahan').select2();
+		}
+	});
+}
 
 loading = function () {
 	$("#loadingContent").html(
 		'<div class="position-fixed t-0 l-0 w-100 h-100 d-flex justify-content-center align-items-center" style="z-index: 1060; background: rgba(0,0,0,0.1);"><div class="spinner-grow spinner-grow-sm text-danger mx-1" role="status"><span class="sr-only">Loading...</span></div><div class="spinner-grow spinner-grow-sm text-danger mx-1" role="status"><span class="sr-only">Loading...</span></div><div class="spinner-grow spinner-grow-sm text-danger mx-1" role="status"><span class="sr-only">Loading...</span></div></div>'
-	);
+		);
 };
 
 clearLoading = function () {
@@ -48,7 +80,7 @@ getAllData = function (url, contentElement, data) {
  */
 
 var DataPilih = 0,
-	idPilih = "";
+idPilih = "";
 
 setChecklist = function (data) {
 	if (data.check == true) {
@@ -112,7 +144,7 @@ readUrl = function (image) {
 			$("#imagePreview").css(
 				"background-image",
 				"url(" + e.target.result + ")"
-			);
+				);
 			$("#imagePreview").html("");
 			$("#imagePreview").hide();
 			$("#imagePreview").fadeIn(650);
@@ -125,26 +157,26 @@ readUrl = function (image) {
  * sweet alert
  * */
 alert_error = function (err){
-  Swal.fire({
-      icon: 'error',
-      text: err,
-    });
+	Swal.fire({
+		icon: 'error',
+		text: err,
+	});
 }
 
 alert_confirm = function (title, text, icon , urlDirect){
 	Swal.fire({
-	  title: title,
-	  text: text,
-	  icon: icon,
-	  showCancelButton: false,
-	  confirmButtonColor: "#3085d6",
-	  cancelButtonColor: "#d33",
-	  confirmButtonText: "Refresh Halaman",
-	  allowOutsideClick: false,
-  	  allowEscapeKey: false
+		title: title,
+		text: text,
+		icon: icon,
+		showCancelButton: false,
+		confirmButtonColor: "#3085d6",
+		cancelButtonColor: "#d33",
+		confirmButtonText: "Refresh Halaman",
+		allowOutsideClick: false,
+		allowEscapeKey: false
 	}).then((result) => {
-	  if (result.isConfirmed) {
-	    window.location.href = urlDirect;
-	  }
+		if (result.isConfirmed) {
+			window.location.href = urlDirect;
+		}
 	});
 }

@@ -13,12 +13,14 @@ class Anggota extends MY_Controller {
 	}
 
 	public function create() {
-		$kec = array(
-			'1' => 'Luragung',
-			'2' => 'Cidahu',
-			'3' => 'Kuningan',
-			'4' => 'Cigugur',
-		);
+		$DEF_PROVINSI = $this->ModelUtama->SETTING("DEF_PROVINSI");
+		$DEF_KABUPATEN = $this->ModelUtama->SETTING("DEF_KABUPATEN");
+		$queryKecamatan = $this->ModelUtama->tampilBanyakBaris("ref_wilayah", "*", array("kode_provinsi" => $DEF_PROVINSI, "kode_kota" => $DEF_KABUPATEN, "CAST(kode_kelurahan as UNSIGNED)"=>0),"AND CAST(kode_kecamatan as UNSIGNED)!=0");
+		$cmbKecamatan = cmbQuery("kode_kecamatan", "0", $queryKecamatan, "kode_kecamatan", "nama", "class='form-select form-select-sm' onchange = 'pilihKecamatan()' ", "Pilih Kecamatan", "0","1", 1, 0);
+
+		$cmbKelurahan = "<select id='kode_kelurahan' name='kode_kelurahan' class='form-select form-select-sm'><option value='0'>Pilih Kelurahan</option></select>";
+
+
 		$data = array(
 			'id' => "",
 			'nik' => "",
@@ -33,9 +35,25 @@ class Anggota extends MY_Controller {
 			"tgl_gabung" => "",
 			"status" => "",
 			"file_kpt" => "",
-			"daftar_kec" => $kec,
+			"cmbKecamatan" => $cmbKecamatan,
+			"cmbKelurahan" => $cmbKelurahan,
 		);
 		$this->template->load('template', 'admin/anggota/form', $data);
+	}
+
+	public function pilihKecamatan($return = 0, $selectedKecamatan = ""){
+		$error = "";$content="";
+		$PS = $this->input->post(NULL, TRUE);
+		if(intval($PS["kode_kecamatan"]) == 0)$err = "Kecamatan Belum di Pilih !";
+
+		$DEF_PROVINSI = $this->ModelUtama->SETTING("DEF_PROVINSI");
+		$DEF_KABUPATEN = $this->ModelUtama->SETTING("DEF_KABUPATEN");
+
+		$queryKecamatan = $this->ModelUtama->tampilBanyakBaris("ref_wilayah", "*", array("kode_provinsi" => $DEF_PROVINSI, "kode_kota" => $DEF_KABUPATEN, "CAST(kode_kecamatan as UNSIGNED)"=>$PS["kode_kecamatan"]),"AND CAST(kode_kelurahan as UNSIGNED)!=0");
+		$content = cmbQuery("kode_kelurahan", "0", $queryKecamatan, "kode_kelurahan", "nama", "class='form-select form-select-sm' ", "Pilih Kelurahan", "0","1", 1, 0);
+
+		echo json_encode($content);
+
 	}
 
 	public function store() {

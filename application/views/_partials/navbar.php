@@ -18,3 +18,4 @@
     </li>
 </ul>
 </div>
+<input type="hidden" value="<?= base_url(); ?>" id="baseUrl" />

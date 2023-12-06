@@ -88,17 +88,42 @@ function Div($class, $element) {
 	return "<div class='" . $class . "'>" . $element . "</div>";
 }
 
+
+function cmbQuery($id, $value, $query, $col1, $col2, $style, $labelAtas, $valueAtas, $pilihanAtas = 1, $withCodeInValue = 1, $withDataJSON = 0){
+	$konten = '<select id="'.$id.'" name="'.$id.'" '.$style.' >';
+	if($pilihanAtas) {
+		$konten .= '<option value="'.$valueAtas.'">'.$labelAtas.'</option>';
+	}
+	$dataN = array();
+	foreach($query as $qry){
+		$dt = $qry;
+		if(is_object($dt)){
+			$dt = (array) $dt;
+		}
+		$selected = $value == $dt[$col1] ? "selected='selected'" : "";
+		$valueData = $withCodeInValue == 1 ? $dt[$col1].". ".$dt[$col2] : $dt[$col2];
+
+		$konten .= "<option value=".$dt[$col1]." ".$selected.">".$valueData."</option>";
+		$dataN[$dt[$col1]] = $dt;
+	}
+	$konten .="</select>";
+	if($withDataJSON){
+		$konten .= "<span class='d-none' id='DataJSON_".$id."'>".json_encode($dataN)."</span>";
+	}
+	return $konten;
+}
+
 function imagePrev($width = '250px', $height = '160px') {
 	return "
-    <div class='position-relative border rounded bg-secondary bg-opacity-10 d-flex justify-content-center align-items-center'
-    style='width: $width; height: $height'>
-    <label for='file-input' class='position-absolute bg-light border border-secondary rounded-circle d-flex align-items-center justify-content-center p-1 text-center' style='top: -4px; right: -8px; cursor: pointer; width: 28px; height: 28px;'>
-        <i class='fa fa-pencil text-secondary' style='font-size: .6rem;'></i>
-    </label>
-    <input class='w-full h-full' type='file' id='file-input' accept='image/`*' hidden /><div class='border rounded'>
-    <div id='imagePreview' class='d-flex justify-content-center align-items-center' style='background-size: cover; background-repeat: no-repeat; background-position: center; width: $width; height: $height'>
-        <i class='fas fa-fw fa-image text-muted' style='font-size: 1.7rem;'></i>
-    </div>
-    </div>
-    </div>";
+	<div class='position-relative border rounded bg-secondary bg-opacity-10 d-flex justify-content-center align-items-center'
+	style='width: $width; height: $height'>
+	<label for='file-input' class='position-absolute bg-light border border-secondary rounded-circle d-flex align-items-center justify-content-center p-1 text-center' style='top: -4px; right: -8px; cursor: pointer; width: 28px; height: 28px;'>
+	<i class='fa fa-pencil text-secondary' style='font-size: .6rem;'></i>
+	</label>
+	<input class='w-full h-full' type='file' id='file-input' accept='image/`*' hidden /><div class='border rounded'>
+	<div id='imagePreview' class='d-flex justify-content-center align-items-center' style='background-size: cover; background-repeat: no-repeat; background-position: center; width: $width; height: $height'>
+	<i class='fas fa-fw fa-image text-muted' style='font-size: 1.7rem;'></i>
+	</div>
+	</div>
+	</div>";
 }

@@ -49,3 +49,8 @@ $('.settings').each(function(){
     });
 })
 
+
+DetailImages = function(id)
+{
+    alert('Hallo' + id);
+}

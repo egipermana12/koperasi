@@ -39,7 +39,16 @@
                     <?= LabelInput('alamat', 'Alamat Anggota'); ?>
                     <textarea class="form-control form-contro-sm" name="alamat" id="alamat" rows="3"></textarea>
                 </div>
-                <?php $this->load->view("_components/selectkota.php", $daftar_kec) ?>
+                <div class="mb-3">
+                    <?= LabelInput('kecamatan', 'Pilih Kecamatan'); ?>
+                    <?= $cmbKecamatan; ?>
+                </div>
+                <div class="mb-3">
+                    <?= LabelInput('Kelurahan', 'Pilih Kelurahan'); ?>
+                    <span id="tukCmbKel">
+                        <?= $cmbKelurahan; ?>
+                    </span>
+                </div>
                 <div class="mb-3">
                     <?= LabelInput('pekerjaan', 'Pekerjaan Anggota'); ?>
                     <?= InputType('text', 'pekerjaan', 'pekerjaan', '', "class='form-control form-control-sm' placeholder='Pekerjaan sesuai KTP'"); ?>
@@ -82,16 +91,6 @@
     // for image prev
     $("#file-input").change(function() {
         readUrl(this);
-    });
-
-    $('.tgl_datepicker').datepicker({
-        dateFormat: "yy-mm-dd",
-        changeMonth: true,
-        changeYear: true,
-        yearRange: "-30:+00",
-        showOn: "button",
-        buttonImage: "/assets/jquery-ui/images/calendar.gif",
-        buttonImageOnly: true,
     });
 
     $('#anggotaForm').on('submit', function(e) {

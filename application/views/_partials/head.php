@@ -17,4 +17,9 @@
 <script src="<?=base_url('assets/sweetalert/sweetalert2.all.min.js');?> "></script>
 <link href="<?=base_url('assets/sweetalert/sweetalert2.min.css');?>" rel="stylesheet" />
 
+<!-- select2 -->
+<script src="<?=base_url('assets/select2/dist/js/select2.full.min.js');?> "></script>
+<link href="<?=base_url('assets/select2/dist/css/select2.min.css');?>" rel="stylesheet" />
+
+<script>var base_url = '<?php echo base_url() ?>';</script>
 <script src="<?=base_url('js/scripts.js') . '?v=' . time();?> "></script>
