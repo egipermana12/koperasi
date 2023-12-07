@@ -2,4 +2,4 @@
   <div id="loadElement"></div>
 </div>
 
-<script src="<?= base_url('js/anggota.js'); ?> "></script>
+<script src="<?= base_url('assets/js/anggota.js'); ?> "></script>

@@ -22,13 +22,13 @@
                     <?= LabelInput('jns_kelamin', 'Jenis Kelamin', '*'); ?>
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
-                            <?= InputType('radio', 'jns_kelamin_L', 'jns_kelamin', '', "class='form-check-input' checked "); ?>
+                            <?= InputType('radio', 'jns_kelamin_L', 'jns_kelamin', 'L', "class='form-check-input' checked "); ?>
                             <label class="form-check-label small" for="jns_kelamin_L">
                                 Laki - Laki
                             </label>
                         </div>
                         <div>
-                            <?= InputType('radio', 'jns_kelamin_P', 'jns_kelamin', '', "class='form-check-input' "); ?>
+                            <?= InputType('radio', 'jns_kelamin_P', 'jns_kelamin', 'P', "class='form-check-input' "); ?>
                             <label class="form-check-label small" for="jns_kelamin_P">
                                 Perempuan
                             </label>
@@ -113,23 +113,25 @@
                 $('#btnSimpan').html('<i class="fas fa-fw fa-save"></i>&nbspSimpan');
             },
             success: function(res) {
+                console.log(res.messages);
                 if (res.success === true) {
-
+                    alert_confirm('Success', 'Data Berhasil Disimpan', 'success', 'anggota');
                 } else {
                     if (res.messages instanceof Object) {
                         $.each(res.messages, function(index, value) {
                             var key = $("#" + index);
                             key.closest('.form-control')
-                                .removeClass('is-invalid')
-                                .removeClass('is-valid')
-                                .addClass(value.length > 0 ? 'is-invalid' : 'is-valid')
-                                .siblings('.text-danger').remove();
+                            .removeClass('is-invalid')
+                            .removeClass('is-valid')
+                            .addClass(value.length > 0 ? 'is-invalid' : 'is-valid')
+                            .siblings('.text-danger').remove();
                             if (key.hasClass('tgl_datepicker')) {
                                 key.next('.ui-datepicker-trigger').after(value);
                             } else {
                                 key.after(value);
                             }
                         });
+                        alert_error('Form Belum Lengkap');
                     } else {
 
                     }

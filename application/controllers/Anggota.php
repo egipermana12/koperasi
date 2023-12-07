@@ -16,8 +16,8 @@ class Anggota extends MY_Controller {
 		$DEF_PROVINSI = $this->ModelUtama->SETTING("DEF_PROVINSI");
 		$DEF_KABUPATEN = $this->ModelUtama->SETTING("DEF_KABUPATEN");
 		$queryKecamatan = $this->ModelUtama->tampilBanyakBaris("ref_wilayah", "*", array("kode_provinsi" => $DEF_PROVINSI, "kode_kota" => $DEF_KABUPATEN, "CAST(kode_kelurahan as UNSIGNED)"=>0),"AND CAST(kode_kecamatan as UNSIGNED)!=0");
-		$cmbKecamatan = cmbQuery("kode_kecamatan", "0", $queryKecamatan, "kode_kecamatan", "nama", "class='form-select form-select-sm' onchange = 'pilihKecamatan()' ", "Pilih Kecamatan", "0","1", 1, 0);
 
+		$cmbKecamatan = cmbQuery("kode_kecamatan", "0", $queryKecamatan, "kode_kecamatan", "nama", "class='form-select form-select-sm' onchange = 'pilihKecamatan()' ", "Pilih Kecamatan", "0","1", 1, 0);
 		$cmbKelurahan = "<select id='kode_kelurahan' name='kode_kelurahan' class='form-select form-select-sm'><option value='0'>Pilih Kelurahan</option></select>";
 
 
@@ -38,7 +38,7 @@ class Anggota extends MY_Controller {
 			"cmbKecamatan" => $cmbKecamatan,
 			"cmbKelurahan" => $cmbKelurahan,
 		);
-		$this->template->load('template', 'admin/anggota/form', $data);
+		$this->template->load('template', 'admin/anggota/formanggota', $data);
 	}
 
 	public function pilihKecamatan($return = 0, $selectedKecamatan = ""){
@@ -63,7 +63,7 @@ class Anggota extends MY_Controller {
 			array(
 				'field' => 'nik',
 				'label' => 'NIK Anggota',
-				'rules' => 'required',
+				'rules' => 'required|is_unique[anggota.nik]',
 			),
 			array(
 				'field' => 'nama',
@@ -76,7 +76,7 @@ class Anggota extends MY_Controller {
 				'rules' => 'required',
 			),
 			array(
-				'field' => 'jnsKelamin',
+				'field' => 'jns_kelamin',
 				'label' => 'Jenis Kelamin',
 				'rules' => 'required',
 			),
@@ -91,12 +91,14 @@ class Anggota extends MY_Controller {
 				'rules' => 'required',
 			),
 		);
+
 		$this->form_validation->set_rules($validate_data);
 		$this->form_validation->set_error_delimiters('<p class="text-danger" style="font-size: 12px; font-weight: 500;">', '</p>');
 		if ($this->form_validation->run() === true) {
-			$create = false;
+			$create = $this->anggota_model->create();
 			if ($create == true) {
-
+				$validator['success'] = true;
+				$validator['messages'] = "Successfully added";
 			} else {
 				$validator['success'] = false;
 				$validator['messages'] = "Error while inserting the information into the database";

@@ -18,7 +18,7 @@ $(document).ready(function () {
 		changeYear: true,
 		yearRange: "-30:+00",
 		showOn: "button",
-		buttonImage: "/assets/jquery-ui/images/calendar.gif",
+		buttonImage: "/assets/vendors/jquery-ui/images/calendar.gif",
 		buttonImageOnly: true,
 	});
 
@@ -176,7 +176,7 @@ alert_confirm = function (title, text, icon , urlDirect){
 		allowEscapeKey: false
 	}).then((result) => {
 		if (result.isConfirmed) {
-			window.location.href = urlDirect;
+			window.location.href = base_url + urlDirect;
 		}
 	});
 }

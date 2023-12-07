@@ -30,7 +30,7 @@ $html[] = '
                             <input type="text" class="form-control form-control-sm" id="qAnggota" value="' . $qAnggota . '" placeholder="Cari Anggota" name="qAnggota" aria-label="First name">
                         </div>
                         <div class="col-3">
-                            <input type="text" value="' . $qTglGabung . '" id="datepicker" class="form-control form-control-sm qTglGabung" placeholder="Tanggal Gabung" name="qTglGabung">
+                            <input type="text" value="' . $qTglGabung . '" id="datepicker" class="form-control form-control-sm qTglGabung datepicker" placeholder="Tanggal Gabung" name="qTglGabung">
                         </div>
                         <div class="col-2">
                             <select class="form-control form-select-sm" id="qStanggota" name="qStanggota" aria-label="Default select example">
@@ -118,7 +118,7 @@ $("#datepicker").datepicker({
     changeYear: true,
     yearRange: "-5:+00",
     showOn: "button",
-    buttonImage: "/assets/jquery-ui/images/calendar.gif",
+    buttonImage: "/assets/vendors/jquery-ui/images/calendar.gif",
     buttonImageOnly: true,
 });
 

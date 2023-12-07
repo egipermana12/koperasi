@@ -82,4 +82,4 @@
 
 
 
-<script src="<?=base_url('js/settings.js');?> "></script>
+<script src="<?=base_url('assets/js/settings.js');?> "></script>
