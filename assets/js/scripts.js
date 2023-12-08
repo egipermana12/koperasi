@@ -171,7 +171,7 @@ alert_confirm = function (title, text, icon , urlDirect){
 		showCancelButton: false,
 		confirmButtonColor: "#3085d6",
 		cancelButtonColor: "#d33",
-		confirmButtonText: "Refresh Halaman",
+		confirmButtonText: "OKE",
 		allowOutsideClick: false,
 		allowEscapeKey: false
 	}).then((result) => {
@@ -179,4 +179,10 @@ alert_confirm = function (title, text, icon , urlDirect){
 			window.location.href = base_url + urlDirect;
 		}
 	});
+}
+
+console_form = function (entries){
+	for(var pair of entries.entries()){
+        console.log(pair[0], pair[1]);
+    }
 }

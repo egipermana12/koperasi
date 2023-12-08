@@ -113,7 +113,6 @@
                 $('#btnSimpan').html('<i class="fas fa-fw fa-save"></i>&nbspSimpan');
             },
             success: function(res) {
-                console.log(res.messages);
                 if (res.success === true) {
                     alert_confirm('Success', 'Data Berhasil Disimpan', 'success', 'anggota');
                 } else {
@@ -130,10 +129,15 @@
                             } else {
                                 key.after(value);
                             }
+
+                            if (value.length > 0) {
+                                // Set focus only if the value is invalid
+                                key.focus();
+                            }
                         });
                         alert_error('Form Belum Lengkap');
                     } else {
-
+                        alert_error(res.messages);
                     }
                 }
             }

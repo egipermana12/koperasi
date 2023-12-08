@@ -95,7 +95,21 @@ class Anggota extends MY_Controller {
 		$this->form_validation->set_rules($validate_data);
 		$this->form_validation->set_error_delimiters('<p class="text-danger" style="font-size: 12px; font-weight: 500;">', '</p>');
 		if ($this->form_validation->run() === true) {
-			$create = $this->anggota_model->create();
+			$config['upload_path']	= "./uploads/ktpanggota";
+			$config['allowed_types']='jpeg|gif|jpg|png';
+			$config['encrypt_name'] = TRUE;
+			$config['max_size']     = 1024;
+			$image = '';
+			$this->load->library('upload',$config);
+			if($this->upload->do_upload('photo')){
+				$data = array('upload_data' => $this->upload->data());
+				$image= $data['upload_data']['file_name'];
+			}else{
+				$validator['success'] = false;
+				$validator['messages'] = $this->upload->display_errors();
+			}
+
+			$create = $this->anggota_model->create($image);
 			if ($create == true) {
 				$validator['success'] = true;
 				$validator['messages'] = "Successfully added";
@@ -111,6 +125,7 @@ class Anggota extends MY_Controller {
 		}
 		echo json_encode($validator);
 	}
+
 
 	public function view($viewOnly = 0) {
 		$pagePerHalaman = 5;

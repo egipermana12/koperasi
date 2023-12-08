@@ -26,9 +26,11 @@ class Anggota_model extends CI_Model
         return $result;
     }
 
-    public function create(){
+    public function create($img_url){
         $post = $this->input->post(NULL, TRUE);
-
+        if($img_url == ''){
+            $img_url = '';
+        }
         $insert_data = array(
             'nik' => $post['nik'],
             'nama' => $post['nama'],
@@ -41,6 +43,7 @@ class Anggota_model extends CI_Model
             'tgl_gabung' => $post['tgl_gabung'],
             'status' => $post['status'],
             'tgl_gabung' => $post['tgl_gabung'],
+            'file_ktp' => $img_url,
         );
         $result = $this->db->insert($this->table, $insert_data);
         return $result;
