@@ -8,27 +8,27 @@
             <form id="anggotaForm" name="anggotaForm" enctype="multipart/form-data">
                 <div class="mb-3">
                     <?= LabelInput('nik', 'Nomor Induk Kependudukan', '*'); ?>
-                    <?= InputType('text', 'nik', 'nik', '', "class='form-control form-control-sm' placeholder='NIK sesuai KTP'"); ?>
+                    <?= InputType('text', 'nik', 'nik', $nik, "class='form-control form-control-sm' placeholder='NIK sesuai KTP'"); ?>
                 </div>
                 <div class="mb-3">
                     <?= LabelInput('nama', 'Nama Anggota', '*'); ?>
-                    <?= InputType('text', 'nama', 'nama', '', "class='form-control form-control-sm' placeholder='Nama sesuai KTP'"); ?>
+                    <?= InputType('text', 'nama', 'nama', $nama, "class='form-control form-control-sm' placeholder='Nama sesuai KTP'"); ?>
                 </div>
                 <div class="mb-3" style="width: 40%;">
                     <?= LabelInput('tgl_lahir', 'Tanggal Lahir Anggota', '*'); ?>
-                    <?= InputType('text', 'tgl_lahir', 'tgl_lahir', '', "class='form-control form-control-sm tgl_datepicker' placeholder='Tanggal Lahir sesuai KTP'"); ?>
+                    <?= InputType('text', 'tgl_lahir', 'tgl_lahir', $tgl_lahir, "class='form-control form-control-sm tgl_datepicker' placeholder='Tanggal Lahir sesuai KTP'"); ?>
                 </div>
                 <div class="mb-3" style="width: 35%;">
                     <?= LabelInput('jns_kelamin', 'Jenis Kelamin', '*'); ?>
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
-                            <?= InputType('radio', 'jns_kelamin_L', 'jns_kelamin', 'L', "class='form-check-input' checked "); ?>
+                            <?= InputType('radio', 'jns_kelamin_L', 'jns_kelamin', 'L', "class='form-check-input'" . ($jns_kelamin == 'L' ? 'checked' : '')); ?>
                             <label class="form-check-label small" for="jns_kelamin_L">
                                 Laki - Laki
                             </label>
                         </div>
                         <div>
-                            <?= InputType('radio', 'jns_kelamin_P', 'jns_kelamin', 'P', "class='form-check-input' "); ?>
+                            <?= InputType('radio', 'jns_kelamin_P', 'jns_kelamin', 'P', "class='form-check-input'" . ($jns_kelamin == 'P' ? 'checked' : '')); ?>
                             <label class="form-check-label small" for="jns_kelamin_P">
                                 Perempuan
                             </label>
@@ -37,7 +37,7 @@
                 </div>
                 <div class="mb-3">
                     <?= LabelInput('alamat', 'Alamat Anggota'); ?>
-                    <textarea class="form-control form-contro-sm" name="alamat" id="alamat" rows="3"></textarea>
+                    <textarea class="form-control form-contro-sm" name="alamat" id="alamat" rows="3"><?= $alamat ?></textarea>
                 </div>
                 <div class="mb-3">
                     <?= LabelInput('kecamatan', 'Pilih Kecamatan'); ?>
@@ -51,23 +51,23 @@
                 </div>
                 <div class="mb-3">
                     <?= LabelInput('pekerjaan', 'Pekerjaan Anggota'); ?>
-                    <?= InputType('text', 'pekerjaan', 'pekerjaan', '', "class='form-control form-control-sm' placeholder='Pekerjaan sesuai KTP'"); ?>
+                    <?= InputType('text', 'pekerjaan', 'pekerjaan', $pekerjaan, "class='form-control form-control-sm' placeholder='Pekerjaan sesuai KTP'"); ?>
                 </div>
                 <div class="mb-3" style="width: 40%;">
                     <?= LabelInput('tgl_gabung', 'Tanggal Bergabung', '*'); ?>
-                    <?= InputType('text', 'tgl_gabung', 'tgl_gabung', '', "class='form-control form-control-sm tgl_datepicker' placeholder='Tanggal Menjadi Anggota'"); ?>
+                    <?= InputType('text', 'tgl_gabung', 'tgl_gabung', $tgl_gabung, "class='form-control form-control-sm tgl_datepicker' placeholder='Tanggal Menjadi Anggota'"); ?>
                 </div>
                 <div class="mb-3" style="width: 25%;">
                     <?= LabelInput('status', 'Status Keanggotaan', '*'); ?>
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
-                            <?= InputType('radio', 'status_A', 'status', 'A', "class='form-check-input' checked "); ?>
+                            <?= InputType('radio', 'status_A', 'status', 'A', "class='form-check-input'" . ($status == 'A' ? 'checked' : '')); ?>
                             <label class="form-check-label small" for="status_A">
                                 Aktif
                             </label>
                         </div>
                         <div>
-                            <?= InputType('radio', 'status_N', 'status', 'N', "class='form-check-input' "); ?>
+                            <?= InputType('radio', 'status_N', 'status', 'N', "class='form-check-input'" . ($status == 'N' ? 'checked' : '')); ?>
                             <label class="form-check-label small" for="status_N">
                                 Non Aktif
                             </label>
@@ -79,6 +79,7 @@
                     <?= imagePrev(); ?>
                 </div>
                 <div class="mt-4">
+                    <?= InputType('hidden', 'id', 'id', $id, ""); ?>
                     <a class="btn btn-sm btn-danger fw-semibold px-3" href="<?= base_url('anggota') ?>"><i class='fas fa-fw fa fa-times'></i>&nbspBatal</a>
                     <button type="submit" class="btn btn-sm btn-success fw-semibold px-3 btnSimpan" id="btnSimpan"><i class='fas fa-fw fa-save'></i>&nbspSimpan</button>
                 </div>
@@ -94,11 +95,18 @@
     });
 
     $('#anggotaForm').on('submit', function(e) {
+        let url;
+        if($('#id').val() === ""){
+            url = base_url + 'anggota/store';
+        }else{
+            url = base_url + 'anggota/update';
+        }
         e.preventDefault();
         let data = new FormData(this);
+        // console_form(data);
         $.ajax({
             type: "POST",
-            url: "store",
+            url: url,
             data: data,
             processData: false,
             contentType: false,

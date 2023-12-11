@@ -48,4 +48,25 @@ class Anggota_model extends CI_Model
         $result = $this->db->insert($this->table, $insert_data);
         return $result;
     }
+
+    public function update($id){
+        $post = $this->input->post(NULL, TRUE);
+
+        $update_data = array(
+            'nik' => $post['nik'],
+            'nama' => $post['nama'],
+            'tgl_lahir' => $post['tgl_lahir'],
+            'jns_kelamin' => $post['jns_kelamin'],
+            'alamat' => $post['alamat'],
+            'kd_kec' => $post['kode_kecamatan'],
+            'kd_desa' => $post['kode_kelurahan'],
+            'pekerjaan' => $post['pekerjaan'],
+            'tgl_gabung' => $post['tgl_gabung'],
+            'status' => $post['status'],
+            'tgl_gabung' => $post['tgl_gabung'],
+        );
+        $this->db->where('id', $id);
+        $result = $this->db->update($this->table, $update_data);
+        return $result;
+    }
 }

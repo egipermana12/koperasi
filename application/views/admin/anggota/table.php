@@ -18,13 +18,24 @@ foreach ($opAktif as $key => $val) {
 
 $html[] = '
 <div class="card my-4">
-<div class="card-header">
-<i class="fas fa-table me-1"></i>
-Daftar Anggota Koperasi
-</div>
 <div class="card-body">
+<div class="row mb-4 align-items-center">
+    <div class="col-6">
+        <h6 class="text-muted">Dafta Anggota Koperasi</h6>
+    </div>
+    <div class="col-6">
+        <div class="row g-1 justify-content-end">
+            <div class="col-auto">
+            <button class="btn btn-sm btn-success">
+                <i class="fa fa-download"></i> <span>Export</span>
+            </button>
+            ' . $button . '
+            </div>
+        </div>
+    </div>
+</div>
 <div class="row g-3 mb-4">
-<div class="col-8">
+<div class="col-12">
 <div class="row justify-content-start">
 <div class="col-4">
 <input type="text" class="form-control form-control-sm" id="qAnggota" value="' . $qAnggota . '" placeholder="Cari Anggota" name="qAnggota" aria-label="First name">
@@ -41,13 +52,6 @@ Daftar Anggota Koperasi
 <div class="col-3">
 <button type="button" onclick="refresh();" class="btn btn-success-25 btn-sm small"><i class="fa fa-refresh"></i>
 Tampilkan</button>
-</div>
-</div>
-</div>
-<div class="col-4">
-<div class="row g-1 justify-content-end">
-<div class="col-auto">
-' . $button . '
 </div>
 </div>
 </div>
@@ -86,7 +90,7 @@ if(count($anggotas) > 0) {
        <span class="small">Actions</span>
        </button>
        <ul class="dropdown-menu">
-       <li><a class="dropdown-item small" href="#">Edit</a></li>
+       <li><a class="dropdown-item small" href="' . base_url("anggota/edit/" . $anggota['id'] ) . '">Edit</a></li>
        <li><a class="dropdown-item small" href="#">Delete</a></li>
        </ul>
        </div>

@@ -39,8 +39,12 @@ pilihKecamatan =  function() {
 		success: function(data) {
 			var resp = eval("(" + data + ")");
 			clearLoading();
-			$('#tukCmbKel').html(resp);
-			$('#kode_kelurahan').select2();
+			if(resp.error === ""){
+				$('#tukCmbKel').html(resp.content);
+				$('#kode_kelurahan').select2();
+			}else{
+				alert(resp.error);
+			}
 		}
 	});
 }
