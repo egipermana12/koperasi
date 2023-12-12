@@ -110,7 +110,7 @@ body {
 .ui-datepicker-trigger{
   float: right;
   margin-top: -24px;
-  margin-right: -18px;
+  margin-right: 14px;
   cursor: pointer;
 }
 

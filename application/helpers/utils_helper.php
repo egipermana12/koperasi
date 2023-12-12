@@ -127,3 +127,15 @@ function imagePrev($width = '250px', $height = '160px') {
 		</div>
 	</div>";
 }
+
+function imageFormDB($image = "", $width = '250px', $height = '160px'){
+	$content = "<div class='position-relative border rounded bg-secondary bg-opacity-10 d-flex justify-content-center align-items-center'style='width: $width; height: $height'>";
+	$content .= "<label for='file-input' class='position-absolute bg-light border border-secondary rounded-circle d-flex align-items-center justify-content-center p-1 text-center' style='top: -4px; right: -8px; cursor: pointer; width: 28px; height: 28px;'><i class='fa fa-pencil text-secondary' style='font-size: .6rem;'></i></label><input class='w-full h-full' type='file' name='photo' id='file-input' accept='image/`*' hidden />";
+	if($image == ""){
+		$content .= "<div class='border rounded'><div id='imagePreview' class='d-flex justify-content-center align-items-center rounded' style='background-size: cover; background-repeat: no-repeat; background-position: center; width: $width; height: $height'><i class='fas fa-fw fa-image text-muted' style='font-size: 1.7rem;'></i></div></div>";
+	}else{
+		$content .= "<div id='imagePreview' class='d-flex justify-content-center align-items-center rounded' style='background-size: cover; background-repeat: no-repeat; background-position: center; width: $width; height: $height'><img src='".$image."' class='d-flex justify-content-center align-items-center rounded' style='background-size: cover; background-repeat: no-repeat; background-position: center; width: $width; height: $height' /></div>";
+	}
+	$content .= "</div>";
+	return $content;
+}

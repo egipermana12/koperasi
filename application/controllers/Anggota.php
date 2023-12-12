@@ -2,24 +2,34 @@
 defined('BASEPATH') or exit('No direct script access allowed');
 
 class Anggota extends MY_Controller {
+	public $kdProv;
+	public $kdKota;
+
 	public function __construct() {
 		parent::__construct();
 		$this->load->model('anggota_model');
 		$this->load->library('form_validation');
+		$this->kdProv = $this->ModelUtama->SETTING("DEF_PROVINSI");
+		$this->kdKota = $this->ModelUtama->SETTING("DEF_KABUPATEN");
 	}
 
 	public function index() {
 		$this->template->load('template', 'admin/anggota/index');
 	}
 
+	public function queryKecamatan(){
+		$queryKecamatan = $this->ModelUtama->tampilBanyakBaris("ref_wilayah", "*", array("kode_provinsi" => $this->kdProv, "kode_kota" => $this->kdKota, "CAST(kode_kelurahan as UNSIGNED)"=>0),"AND CAST(kode_kecamatan as UNSIGNED)!=0");
+		return $queryKecamatan;
+	}
+
+	public function queryKelurahan($idKecamatan = 0){
+		$queryKelurahan = $this->ModelUtama->tampilBanyakBaris("ref_wilayah", "*", array("kode_provinsi" => $this->kdProv, "kode_kota" => $this->kdKota, "CAST(kode_kecamatan as UNSIGNED)"=>$idKecamatan),"AND CAST(kode_kelurahan as UNSIGNED)!=0");
+		return $queryKelurahan;
+	}
+
 	public function create() {
-		$DEF_PROVINSI = $this->ModelUtama->SETTING("DEF_PROVINSI");
-		$DEF_KABUPATEN = $this->ModelUtama->SETTING("DEF_KABUPATEN");
-		$queryKecamatan = $this->ModelUtama->tampilBanyakBaris("ref_wilayah", "*", array("kode_provinsi" => $DEF_PROVINSI, "kode_kota" => $DEF_KABUPATEN, "CAST(kode_kelurahan as UNSIGNED)"=>0),"AND CAST(kode_kecamatan as UNSIGNED)!=0");
-
-		$cmbKecamatan = cmbQuery("kode_kecamatan", "0", $queryKecamatan, "kode_kecamatan", "nama", "class='form-select form-select-sm' onchange = 'pilihKecamatan()' ", "Pilih Kecamatan", "0","1", 1, 0);
+		$cmbKecamatan = cmbQuery("kode_kecamatan", "0", $this->queryKecamatan(), "kode_kecamatan", "nama", "class='form-select form-select-sm' onchange = 'pilihKecamatan()' ", "Pilih Kecamatan", "0","1", 1, 0);
 		$cmbKelurahan = "<select id='kode_kelurahan' name='kode_kelurahan' class='form-select form-select-sm'><option value='0'>Pilih Kelurahan</option></select>";
-
 
 		$data = array(
 			'id' => "",
@@ -32,6 +42,7 @@ class Anggota extends MY_Controller {
 			"tgl_gabung" => "",
 			"status" => "A",
 			"file_ktp" => "",
+			"file_ktp_old" => "",
 			"cmbKecamatan" => $cmbKecamatan,
 			"cmbKelurahan" => $cmbKelurahan,
 		);
@@ -40,18 +51,15 @@ class Anggota extends MY_Controller {
 
 	public function edit($id=null){
 		if (!isset($id)) redirect('anggota');
-
-		$DEF_PROVINSI = $this->ModelUtama->SETTING("DEF_PROVINSI");
-		$DEF_KABUPATEN = $this->ModelUtama->SETTING("DEF_KABUPATEN");
-		$queryKecamatan = $this->ModelUtama->tampilBanyakBaris("ref_wilayah", "*", array("kode_provinsi" => $DEF_PROVINSI, "kode_kota" => $DEF_KABUPATEN, "CAST(kode_kelurahan as UNSIGNED)"=>0),"AND CAST(kode_kecamatan as UNSIGNED)!=0");
-
 		$getData = $this->ModelUtama->tampilSatuBaris('anggota', "*", array("id" => $id));
 
-		$queryKel = $this->ModelUtama->tampilBanyakBaris("ref_wilayah", "*", array("kode_provinsi" => $DEF_PROVINSI, "kode_kota" => $DEF_KABUPATEN, "CAST(kode_kecamatan as UNSIGNED)"=>$getData["kd_kec"]),"AND CAST(kode_kelurahan as UNSIGNED)!=0");
+		if(!$getData){
+			show_404();
+		}
 
-		$cmbKecamatan = cmbQuery("kode_kecamatan", $getData["kd_kec"], $queryKecamatan, "kode_kecamatan", "nama", "class='form-select form-select-sm' onchange = 'pilihKecamatan()' ", "Pilih Kecamatan", "0","1", 1, 0);
+		$cmbKecamatan = cmbQuery("kode_kecamatan", $getData["kd_kec"], $this->queryKecamatan(), "kode_kecamatan", "nama", "class='form-select form-select-sm' onchange = 'pilihKecamatan()' ", "Pilih Kecamatan", "0","1", 1, 0);
 
-		$cmbKelurahan = cmbQuery("kode_kelurahan", $getData["kd_desa"], $queryKel, "kode_kelurahan", "nama", "class='form-select form-select-sm' ", "Pilih Kelurahan", "0","1", 1, 0);
+		$cmbKelurahan = cmbQuery("kode_kelurahan", $getData["kd_desa"], $this->queryKelurahan($getData["kd_kec"]), "kode_kelurahan", "nama", "class='form-select form-select-sm' ", "Pilih Kelurahan", "0","1", 1, 0);
 
 		$data = array(
 			'id' => $getData["id"],
@@ -64,6 +72,7 @@ class Anggota extends MY_Controller {
 			"tgl_gabung" => $getData["tgl_gabung"],
 			"status" => $getData["status"],
 			"file_ktp" => $getData["file_ktp"],
+			"file_ktp_old" => $getData["file_ktp"],
 			"cmbKecamatan" => $cmbKecamatan,
 			"cmbKelurahan" => $cmbKelurahan,
 		);
@@ -88,9 +97,7 @@ class Anggota extends MY_Controller {
 
 	}
 
-	public function store() {
-		$validator = array('success' => false, 'messages' => array());
-
+	private function validationMessageCreate(){
 		$validate_data = array(
 			array(
 				'field' => 'nik',
@@ -118,8 +125,13 @@ class Anggota extends MY_Controller {
 				'rules' => 'required',
 			),
 		);
+		return $validate_data;
+	}
 
-		$this->form_validation->set_rules($validate_data);
+	public function store() {
+		$validator = array('success' => false, 'messages' => array());
+
+		$this->form_validation->set_rules($this->validationMessageCreate());
 		$this->form_validation->set_error_delimiters('<p class="text-danger" style="font-size: 12px; font-weight: 500;">', '</p>');
 
 		if ($this->form_validation->run() === true) {
@@ -127,7 +139,7 @@ class Anggota extends MY_Controller {
 			$create = $this->anggota_model->create($image);
 			if ($create == true) {
 				$validator['success'] = true;
-				$validator['messages'] = "Successfully added";
+				$validator['messages'] = "Data berhasil disimpan";
 			} else {
 				$validator['success'] = false;
 				$validator['messages'] = "Error while inserting the information into the database";
@@ -141,19 +153,16 @@ class Anggota extends MY_Controller {
 		echo json_encode($validator);
 	}
 
-	public function update(){
-		$validator = array('success' => false, 'messages' => array());
-
+	private function validationMessageEdit($id = "", $nik = ""){
 		$rules = '';
-		$id = $this->input->post('id');
-		$getData = $this->ModelUtama->tampilSatuBaris('anggota', "*", array("id" => $id));
-
-		if($getData["nik"] === $this->input->post('nik')){
-			$rules = 'required';
-		}else{
-			$rules = 'required|is_unique[anggota.nik]';
+		if(!empty($id)){
+			$getData = $this->ModelUtama->tampilSatuBaris('anggota', "*", array("id" => $id));
+			if($getData["nik"] === $nik){
+				$rules = 'required';
+			}else{
+				$rules = 'required|is_unique[anggota.nik]';
+			}
 		}
-
 		$validate_data = array(
 			array(
 				'field' => 'nik',
@@ -181,15 +190,24 @@ class Anggota extends MY_Controller {
 				'rules' => 'required',
 			),
 		);
+		return $validate_data;
+	}
 
-		$this->form_validation->set_rules($validate_data);
+	public function update(){
+		$validator = array('success' => false, 'messages' => array());
+
+		$id = $this->input->post('id');
+		$nik = $this->input->post('nik');
+		$getData = $this->ModelUtama->tampilSatuBaris('anggota', "*", array("id" => $id));
+
+		$this->form_validation->set_rules($this->validationMessageEdit($id, $nik));
 		$this->form_validation->set_error_delimiters('<p class="text-danger" style="font-size: 12px; font-weight: 500;">', '</p>');
 
 		if ($this->form_validation->run() === true) {
 			$update = $this->anggota_model->update($id);
 			if ($update == true) {
 				$validator['success'] = true;
-				$validator['messages'] = "Successfully added";
+				$validator['messages'] = "Data berhasil diupdate";
 			} else {
 				$validator['success'] = false;
 				$validator['messages'] = "Error while inserting the information into the database";

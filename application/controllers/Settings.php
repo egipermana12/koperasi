@@ -7,7 +7,7 @@ class Settings extends MY_Controller {
 	}
 
 	public function index() {
-		$settings = $this->ModelUtama->tampilBanyakBaris('settings', "*", array(), "Order By urut");
+		$settings = $this->ModelUtama->tampilBanyakBaris('settings', "*", array(), "Order By label_menu,urut");
 		$images = $this->ModelUtama->tampilBanyakBaris('settings_images', "*", array(), "Order By id");
 		$data['settings'] = $settings;
 		$data['images'] = $images;

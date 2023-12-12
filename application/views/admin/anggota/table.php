@@ -43,13 +43,13 @@ $html[] = '
 <div class="col-3">
 <input type="text" value="' . $qTglGabung . '" id="datepicker" class="form-control form-control-sm qTglGabung datepicker" placeholder="Tanggal Gabung" name="qTglGabung">
 </div>
-<div class="col-2">
+<div class="col-3">
 <select class="form-control form-select-sm" id="qStanggota" name="qStanggota" aria-label="Default select example">
 <option value="">Filter Status</option>
 ' . $stSelectOp . '
 </select>
 </div>
-<div class="col-3">
+<div class="col-2">
 <button type="button" onclick="refresh();" class="btn btn-success-25 btn-sm small"><i class="fa fa-refresh"></i>
 Tampilkan</button>
 </div>

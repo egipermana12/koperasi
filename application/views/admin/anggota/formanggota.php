@@ -76,10 +76,17 @@
                 </div>
                 <div class="mb-3">
                     <?= LabelInput('file_KTP', 'File KTP Anggota'); ?>
-                    <?= imagePrev(); ?>
+                    <?php
+                        $image = "";
+                        if($file_ktp != ""){
+                            $image = base_url("uploads/ktpanggota/" . $file_ktp);
+                        }
+                        echo imageFormDB($image);
+                    ?>
                 </div>
                 <div class="mt-4">
                     <?= InputType('hidden', 'id', 'id', $id, ""); ?>
+                    <?= InputType('hidden', 'file_ktp_old', 'file_ktp_old', $file_ktp_old, ""); ?>
                     <a class="btn btn-sm btn-danger fw-semibold px-3" href="<?= base_url('anggota') ?>"><i class='fas fa-fw fa fa-times'></i>&nbspBatal</a>
                     <button type="submit" class="btn btn-sm btn-success fw-semibold px-3 btnSimpan" id="btnSimpan"><i class='fas fa-fw fa-save'></i>&nbspSimpan</button>
                 </div>
@@ -122,7 +129,7 @@
             },
             success: function(res) {
                 if (res.success === true) {
-                    alert_confirm('Success', 'Data Berhasil Disimpan', 'success', 'anggota');
+                    alert_confirm('Success', res.messages, 'success', 'anggota');
                 } else {
                     if (res.messages instanceof Object) {
                         $.each(res.messages, function(index, value) {
