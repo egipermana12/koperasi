@@ -49,9 +49,19 @@ class Anggota_model extends CI_Model
         return $result;
     }
 
-    public function update($id){
+    public function update($id, $image){
         $post = $this->input->post(NULL, TRUE);
-
+        $img_url = '';
+        $fileKtpOld = $post['file_ktp_old'];
+        if($image != $fileKtpOld || $image != ""){
+            $img_url = $image;
+            $filenya = 'uploads/ktpanggota/'.$fileKtpOld;
+            if(file_exists($filenya)){
+                unlink($filenya);
+            }
+        }else{
+            $img_url = $post['file_ktp_old'];
+        }
         $update_data = array(
             'nik' => $post['nik'],
             'nama' => $post['nama'],
@@ -64,6 +74,7 @@ class Anggota_model extends CI_Model
             'tgl_gabung' => $post['tgl_gabung'],
             'status' => $post['status'],
             'tgl_gabung' => $post['tgl_gabung'],
+            'file_ktp' => $img_url,
         );
         $this->db->where('id', $id);
         $result = $this->db->update($this->table, $update_data);

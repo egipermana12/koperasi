@@ -204,7 +204,14 @@ class Anggota extends MY_Controller {
 		$this->form_validation->set_error_delimiters('<p class="text-danger" style="font-size: 12px; font-weight: 500;">', '</p>');
 
 		if ($this->form_validation->run() === true) {
-			$update = $this->anggota_model->update($id);
+			$imageStatus = $_FILES['photo']['error'];
+			$image = '';
+			if($imageStatus == 4){ // UPLOAD_ERR_NO_FILE
+				$image = $this->input->post('file_ktp_old');
+			}else{
+				$image = $this->uploadImage('photo');
+			}
+			$update = $this->anggota_model->update($id, $image);
 			if ($update == true) {
 				$validator['success'] = true;
 				$validator['messages'] = "Data berhasil diupdate";
