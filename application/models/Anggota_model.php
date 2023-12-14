@@ -13,14 +13,21 @@ class Anggota_model extends CI_Model
 
     public function generateData($status, $likes, $wheres, $pagePerHalaman, $pageStart)
     {
-        $generate = $this->db->group_start()
+        $generate = $this->db
+            ->select('anggota.*, kec.nama as kecamatan, desa.nama as desa')
+            ->group_start()
             ->like('nik', $likes)
-            ->or_like('nama', $likes)
+            ->or_like('anggota.nama', $likes)
             ->group_end()
-            ->where($wheres);
+            ->where($wheres)
+            ->join('ref_wilayah as kec', 'kec.kode_kecamatan = ' .$this->table. '.kd_kec and kec.kode_kelurahan = "0000" ')
+            ->join('ref_wilayah as desa', 'desa.kode_kecamatan = ' .$this->table. '.kd_kec and ' .$this->table. '.kd_desa = desa.kode_kelurahan');
         if ($status == 1) {
             $result = $generate->order_by('id', 'DESC')->limit($pagePerHalaman, $pageStart)->get($this->table)->result_array();
-        } else {
+        }else if($status == 2){
+            $result = $generate->order_by('id', 'DESC')->get($this->table)->result();
+        }
+        else {
             $result = $generate->from($this->table)->count_all_results();
         }
         return $result;

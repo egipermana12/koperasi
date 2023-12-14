@@ -287,4 +287,48 @@ class Anggota extends MY_Controller {
 		];
 		echo json_encode($json);
 	}
+
+	public function export($opt){
+		$error = "";
+		$crAnggota = $this->input->post("qAnggota");
+		$crTglGabung = $this->input->post("qTglGabung");
+		$stAnggota = $this->input->post("qStanggota");
+		$url = base_url("anggota/cetak?nama=". $crAnggota ."&tgl=". $crTglGabung ."&status=". $stAnggota);
+
+		$json = [
+			'error' => $error,
+			'url' => $url,
+			'aa' => $crTglGabung
+		];
+		echo json_encode($json);
+	}
+
+	public function cetak(){
+		$crAnggota = $this->input->get('nama');
+		$crTglGabung = $this->input->get('tgl');
+		$stAnggota = $this->input->get('status');
+		$like = '';
+		$wheres = array();
+		//set params
+		if (!empty($crAnggota) && $crAnggota != "") {
+			$like = $crAnggota;
+		}
+		if (!empty($crTglGabung) && $crTglGabung != "") {
+			$wheres['tgl_gabung'] = $crTglGabung;
+		}
+		if (!empty($stAnggota) && $stAnggota != "") {
+			$wheres['status'] = $stAnggota;
+		}
+
+		$dataAnggota = $this->anggota_model->getAll('2', $like, $wheres, 0, 0);
+		$logo = $this->ModelUtama->SETTING("LOGO_APPS");
+
+		$data = array(
+			'dataAnggota' => $dataAnggota,
+			'logo' => $logo
+		);
+
+		$this->load->view('admin/anggota/cetak', $data);
+	}
+
 }

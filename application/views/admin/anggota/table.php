@@ -1,10 +1,23 @@
 <?php
 $html = [];
-$button = "";
+$btnDiv = "";
 if ($viewOnly) {
 
 } else {
-	$button .= "<a href='" . base_url("anggota/create") . "'><button type='button' class='btn btn-primary btn-sm fw-semibold small'><i class='fa fa-plus-circle'></i>  Add Anggota</button></a>";
+    $btnDiv .= '
+        <div class="d-flex justify-content-end align-items-center">
+            <div class="dropdown mx-2">
+                <button class="btn btn-sm btn-success dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fa fa-download"></i> <span>Export</span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item small text-secondary" href="javascript:Export(`cetak`)"><i class="fa fa-print"></i>&nbsp;Print Data</a></li>
+                    <li><a class="dropdown-item small text-secondary" href="#""><i class="fa fa-file-excel"></i>&nbsp;Excel</a></li>
+                    <li><a class="dropdown-item small text-secondary" href="#""><i class="fa fa-file-pdf"></i>&nbsp;PDF</a></li>
+                </ul>
+            </div>
+            <a href=" '. base_url('anggota/create') . ' "><button type="button" class="btn btn-primary btn-sm fw-semibold small"><i class="fa fa-plus-circle"></i>  Add Anggota</button></a>
+        </div>';
 }
 ;
 
@@ -21,17 +34,10 @@ $html[] = '
 <div class="card-body">
 <div class="row mb-4 align-items-center">
     <div class="col-6">
-        <h6 class="text-muted">Dafta Anggota Koperasi</h6>
+        <h6 class="text-muted">Daftar Anggota Koperasi</h6>
     </div>
     <div class="col-6">
-        <div class="row g-1 justify-content-end">
-            <div class="col-auto">
-            <button class="btn btn-sm btn-success">
-                <i class="fa fa-download"></i> <span>Export</span>
-            </button>
-            ' . $button . '
-            </div>
-        </div>
+        ' . $btnDiv . '
     </div>
 </div>
 <div class="row g-3 mb-4">
@@ -139,7 +145,7 @@ $("#datepicker").datepicker({
         Form = new FormData();
         Form.append("pageStart", $("#pageStart").val() );
         Form.append("qAnggota", $("#qAnggota").val() );
-        Form.append("qTglGabung", $(".qTglGabung").val() );
+        Form.append("qTglGabung", $("#datepicker").val() );
         Form.append("qStanggota", $("#qStanggota").val() );
     }
 
@@ -159,6 +165,26 @@ $("#datepicker").datepicker({
     {
         $("#pageStart").val();
         getData(pageStart);
+    }
+
+    Export = function(opt){
+        setForm();
+        $.ajax({
+            type:"POST",
+            data: Form,
+            processData: false,
+            contentType: false,
+            url: "'.base_url("anggota/export/").'" + opt,
+            success: function(data){
+                var res = JSON.parse(data);
+                console.log(res);
+                if(res.error === ""){
+                   window.open(res.url, "_blank");
+                }else{
+
+                }
+            }
+        });
     }
 
     </script>
