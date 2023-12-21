@@ -12,7 +12,7 @@ if ($viewOnly) {
                 </button>
                 <ul class="dropdown-menu">
                     <li><a class="dropdown-item small text-secondary" href="javascript:Export(`cetak`)"><i class="fa fa-print"></i>&nbsp;Print Data</a></li>
-                    <li><a class="dropdown-item small text-secondary" href="#""><i class="fa fa-file-excel"></i>&nbsp;Excel</a></li>
+                    <li><a class="dropdown-item small text-secondary" href="'. base_url('anggota/excel') . '"><i class="fa fa-file-excel"></i>&nbsp;Excel</a></li>
                     <li><a class="dropdown-item small text-secondary" href="#""><i class="fa fa-file-pdf"></i>&nbsp;PDF</a></li>
                 </ul>
             </div>

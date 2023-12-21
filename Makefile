@@ -3,3 +3,6 @@ docrun:
 
 docdown:
 	docker compose down
+
+docbuild:
+	docker compose up -d --build

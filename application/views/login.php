@@ -20,28 +20,21 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                     <h3 class="text-center font-weight-light my-4">Login</h3>
                                 </div>
                                 <div class="card-body">
-                                    <form>
+                                    <form id="formLogin" name="formLogin" autocomplete="off">
                                         <div class="form-floating mb-3">
-                                            <input class="form-control" id="inputEmail" type="email" placeholder="name@example.com" />
-                                            <label for="inputEmail">Email address</label>
+                                            <input class="form-control" id="username" name="username" type="text" placeholder="username" />
+                                            <label for="inputEmail">Username</label>
                                         </div>
                                         <div class="form-floating mb-3">
-                                            <input class="form-control" id="inputPassword" type="password" placeholder="Password" />
+                                            <input class="form-control" id="password" name="password" type="password" placeholder="Password" />
                                             <label for="inputPassword">Password</label>
                                         </div>
-                                        <div class="form-check mb-3">
-                                            <input class="form-check-input" id="inputRememberPassword" type="checkbox" value="" />
-                                            <label class="form-check-label" for="inputRememberPassword">Remember Password</label>
-                                        </div>
-                                        <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
-                                            <a class="small" href="password.html">Forgot Password?</a>
-                                            <a class="btn btn-primary" href="<?= base_url('dashboard'); ?>">Login</a>
+                                        <div class="mt-4 mb-0">
+                                            <button type="submit" class="w-100 btn btn-success fw-semibold px-3 btnLogin" id="btnLogin">Login</button>
                                         </div>
                                     </form>
                                 </div>
-                                <div class="card-footer text-center py-3">
-                                    <div class="small"><a href="register.html">Need an account? Sign up!</a></div>
-                                </div>
+
                             </div>
                         </div>
                     </div>
@@ -49,7 +42,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
             </main>
         </div>
         <div id="layoutAuthentication_footer">
-            <footer class="py-4 bg-light mt-auto">
+            <footer class="py-2 bg-light mt-auto">
                 <div class="container-fluid px-4">
                     <div class="d-flex align-items-center justify-content-between small">
                         <div class="text-muted">Copyright &copy; Your Website 2023</div>
@@ -64,7 +57,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-    <script src="<?= base_url('js/scripts.js'); ?> "></script>
+    <script src="<?=base_url('assets/js/auth.js');?> "></script>
 </body>
 
 </html>
