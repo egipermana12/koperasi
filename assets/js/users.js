@@ -16,3 +16,18 @@ getData = function(pageStart = 0)
 };
 
 getData();
+
+showModal = function()
+{
+    loading();
+    $.ajax({
+        type: "POST",
+        url: base_url + "users/new",
+        success: function(res){
+            clearLoading();
+            $("#tampilModal").html(res.data);
+            $("#staticBackdrop").modal("show");
+            $("#staticBackdrop").appendTo("body");
+        }
+    });
+}
