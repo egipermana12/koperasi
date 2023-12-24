@@ -16,16 +16,143 @@ class Users extends MY_Controller {
         $data = [
             "judul" => "Tambah User Baru",
             "username" => "",
-            "name" => "",
+            "nama" => "",
             "password" => "",
-            "status" => "",
-            "level" => "",
-            "modul_anggota" => 0
+            "status" => "1",
+            "level" => "2",
+            "modul_anggota" => 0,
+            "id" => ""
         ];
         $json = [
-            'data' => $this->load->view('admin/users/formUsers', $data),
+            'data' => $this->load->view('admin/users/formUser', $data),
         ];
         echo json_encode($json);
+    }
+
+    public function edit(){
+        $uid = $this->input->post('uid');
+        $getData = $this->ModelUtama->tampilSatuBaris('users', "*", array("uid" => $uid));
+
+        $data = [
+            "judul" => "Edit Data User",
+            "username" => $getData['uid'],
+            "nama" => $getData['nama'],
+            "password" => "",
+            "status" => $getData['status'],
+            "level" => $getData['level'],
+            "modul_anggota" => $getData['modul_anggota'],
+            "id" => $getData['uid']
+        ];
+        $json = [
+            'data' => $this->load->view('admin/users/formUser', $data),
+        ];
+        echo json_encode($json);
+    }
+
+    public function store(){
+        $validator = array('success' => false, 'messages' => array());
+
+        $validate_data = array(
+            array(
+                'field' => 'uid',
+                'label' => 'username',
+                'rules' => 'required|is_unique[users.uid]'
+            ),
+            array(
+                'field' => 'nama',
+                'label' => 'Nama Lengkap',
+                'rules' => 'required'
+            ),
+            array(
+                'field' => 'password',
+                'label' => 'Password',
+                'rules' => 'required'
+            ),
+        );
+        $this->form_validation->set_rules($validate_data);
+        $this->form_validation->set_error_delimiters('<p class="text-danger" style="font-size: 12px; font-weight: 500;">', '</p>');
+        if ($this->form_validation->run() === true) {
+            $save = $this->users_model->create();
+            if ($save == true) {
+                $validator['success'] = true;
+                $validator['messages'] = "Data berhasil disimpan";
+            } else {
+                $validator['success'] = false;
+                $validator['messages'] = "Error while inserting the information into the database";
+            }
+        }else{
+            $validator['success'] = false;
+            foreach ($_POST as $key => $value) {
+                $validator['messages'][$key] = form_error($key);
+            }
+        }
+        echo json_encode($validator);
+    }
+
+    public function update(){
+        $unique = "";
+        $id = $this->input->post('id');
+        if(!empty($id)){
+            $getData = $this->ModelUtama->tampilSatuBaris('users', "*", array("uid" => $id));
+            if($getData["uid"] === $id){
+                $rules = 'required';
+            }else{
+                $rules = 'required|is_unique[users.uid]';
+            }
+        }
+
+        $validator = array('success' => false, 'messages' => array());
+
+        $validate_data = array(
+            array(
+                'field' => 'uid',
+                'label' => 'username',
+                'rules' => $unique
+            ),
+            array(
+                'field' => 'nama',
+                'label' => 'Nama Lengkap',
+                'rules' => 'required'
+            )
+        );
+        $this->form_validation->set_rules($validate_data);
+        $this->form_validation->set_error_delimiters('<p class="text-danger" style="font-size: 12px; font-weight: 500;">', '</p>');
+        if ($this->form_validation->run() === true) {
+            $save = $this->users_model->update($id);
+            if ($save == true) {
+                $validator['success'] = true;
+                $validator['messages'] = "Data berhasil diupdate";
+            } else {
+                $validator['success'] = false;
+                $validator['messages'] = "Error while inserting the information into the database";
+            }
+        }else{
+            $validator['success'] = false;
+            foreach ($_POST as $key => $value) {
+                $validator['messages'][$key] = form_error($key);
+            }
+        }
+        echo json_encode($validator);
+    }
+
+    public function delete()
+    {
+        $validator = array('success' => false, 'messages' => array());
+
+        $uid = $this->input->post('uid');
+        $uids = explode(",", $uid);
+
+        if(!empty($uid)) {
+            $delete = $this->users_model->delete($uids);
+            if($delete === true){
+                $validator['success'] = true;
+                $validator['messages'] = "Data berhasil dihapus";
+            }else{
+                $validator['success'] = false;
+                $validator['messages'] = "Error while delete the information into the database";
+            }
+        }
+        echo json_encode($validator);
     }
 
     public function view($viewOnly = 0) {
@@ -35,21 +162,20 @@ class Users extends MY_Controller {
         $wheres = array();
 
         //param post 
-        $post = $this->input->post(NULL, TRUE);
-        $pageStartPost = $post['pageStart'];
-        $qUid = $post['username'];
-        $qName = $post['name'];
-        $qStatus = $post['status'];
-        $qLevel = $post['level'];
+        $pageStartPost = $this->input->post('pageStart');
+        $qUid = $this->input->post('username');
+        $qName = $this->input->post('nama');
+        $qStatus = $this->input->post('status');
+        $qLevel = $this->input->post('level');
 
         if($pageStartPost){
             $pageStart = $pageStartPost;
         }
         if(!empty($qUid)){
-            $likes['username'] = $qUid;
+            $likes['uid'] = $qUid;
         }
         if(!empty($qName)){
-            $likes['name'] = $qUid;
+            $likes['nama'] = $qName;
         }
         if(!empty($qStatus)){
             $wheres['status'] = $qStatus;

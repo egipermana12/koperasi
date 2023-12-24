@@ -13,7 +13,6 @@ class Auth extends CI_Controller {
 
 	public function login(){
 		$validator = array('success' => false, 'messages' => array());
-
 		$validate_data = array(
 			array(
 				'field' => 'username',

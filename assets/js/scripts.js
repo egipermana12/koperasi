@@ -83,16 +83,46 @@ getAllData = function (url, contentElement, data) {
  * start handle checkbox global
  */
 
-var DataPilih = 0,
+DataPilih = 0;
 idPilih = "";
 
 setChecklist = function (data) {
-	if (data.check == true) {
+	if (data.checked == true) {
 		DataPilih++;
 	} else {
-		DataPilih--;
+		if(DataPilih > 0){
+			DataPilih--;
+		}
 	}
+	setBtnEdit();
+	setBtnDelete();
 };
+
+setBtnEdit = function(){
+	let btn = $('#btnEdit');
+	if(DataPilih == 1){
+		btn.removeAttr('disabled');
+		btn.addClass('btn-warning');
+		btn.removeClass('btn-secondary');
+	}else{
+		btn.attr('disabled','disabled');
+		btn.removeClass('btn-warning');
+		btn.addClass('btn-secondary');
+	}
+}
+
+setBtnDelete = function(){
+	let btn = $('#btnDelete');
+	if(DataPilih > 0){
+		btn.removeAttr('disabled');
+		btn.addClass('btn-danger');
+		btn.removeClass('btn-secondary');
+	}else{
+		btn.attr('disabled','disabled');
+		btn.removeClass('btn-danger');
+		btn.addClass('btn-secondary');
+	}
+}
 
 cekJumlahData = function () {
 	var jmlData = 0;
@@ -119,15 +149,15 @@ checkedAll = function () {
 	if (checkAll) {
 		isChecked = checkAll.checked;
 		for (let i = 0; i < checkboxes.length; i++) {
-			setCB = true;
+			setData = true;
 			if (isChecked && checkboxes[i].checked) {
-				setCB = false;
+				setData = false;
 			}
 			if (!isChecked && !checkboxes[i].checked) {
-				setCB = false;
+				setData = false;
 			}
 			checkboxes[i].checked = isChecked;
-			if (setCB) {
+			if (setData) {
 				AfterChekedAll(checkboxes[i]);
 			}
 		}
@@ -167,6 +197,13 @@ alert_error = function (err){
 	});
 }
 
+alert_success = function (err){
+	Swal.fire({
+		icon: 'success',
+		text: err,
+	});
+}
+
 alert_confirm = function (title, text, icon , urlDirect){
 	Swal.fire({
 		title: title,
@@ -184,6 +221,7 @@ alert_confirm = function (title, text, icon , urlDirect){
 		}
 	});
 }
+
 
 console_form = function (entries){
 	for(var pair of entries.entries()){
