@@ -18,9 +18,8 @@ $('#formLogin').on('submit', function(e) {
             $('#btnLogin').html('Login');
         },
         success: function(res) {
-
             if(res.success === true){
-
+                window.location.href = res.messages;
             }else{
                 if (res.messages instanceof Object) {
                     $.each(res.messages, function(index, value) {
@@ -41,6 +40,8 @@ $('#formLogin').on('submit', function(e) {
 
                     });
                 } else {
+                    $('#username').closest('.form-control').removeClass('is-invalid').removeClass('is-valid').siblings('.text-danger').remove();
+                    $('#password').closest('.form-control').removeClass('is-invalid').removeClass('is-valid').siblings('.text-danger').remove();
                     alert_error(res.messages);
                 }
             }

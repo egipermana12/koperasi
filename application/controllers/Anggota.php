@@ -6,6 +6,7 @@ include_once APPPATH . '/third_party/PHPExcel/Classes/PHPExcel.php';
 class Anggota extends MY_Controller {
 	public $kdProv;
 	public $kdKota;
+	var $modul = 'modul_anggota';
 
 	public function __construct() {
 		parent::__construct();
@@ -16,7 +17,7 @@ class Anggota extends MY_Controller {
 	}
 
 	public function index() {
-		$this->template->load('template', 'admin/anggota/index');
+		$this->genView($this->modul,'admin/anggota/index');
 	}
 
 	public function queryKecamatan(){
@@ -48,7 +49,8 @@ class Anggota extends MY_Controller {
 			"cmbKecamatan" => $cmbKecamatan,
 			"cmbKelurahan" => $cmbKelurahan,
 		);
-		$this->template->load('template', 'admin/anggota/formanggota', $data);
+
+		$this->hasPermissionView($this->modul,'admin/anggota/formanggota', $data);
 	}
 
 	public function edit($id=null){
@@ -78,7 +80,7 @@ class Anggota extends MY_Controller {
 			"cmbKecamatan" => $cmbKecamatan,
 			"cmbKelurahan" => $cmbKelurahan,
 		);
-		$this->template->load('template', 'admin/anggota/formanggota', $data);
+		$this->hasPermissionView($this->modul,'admin/anggota/formanggota', $data);
 	}
 
 	public function pilihKecamatan($return = 0, $kdKelurahan = ""){

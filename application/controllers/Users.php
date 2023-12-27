@@ -1,6 +1,7 @@
 <?php
 
 class Users extends MY_Controller {
+    var $modul = 'modul_users';
 
     public function __construct() {
         parent::__construct();
@@ -9,7 +10,7 @@ class Users extends MY_Controller {
     }
 
     public function index() {
-        $this->template->load('template', 'admin/users/index');
+        $this->genView($this->modul,'admin/users/index');
     }
 
     public function new(){
@@ -24,8 +25,9 @@ class Users extends MY_Controller {
             "id" => ""
         ];
         $json = [
-            'data' => $this->load->view('admin/users/formUser', $data),
+            'data' => $this->hasPermissionJSON($this->modul,'admin/users/formUser', $data),
         ];
+
         echo json_encode($json);
     }
 
@@ -44,7 +46,7 @@ class Users extends MY_Controller {
             "id" => $getData['uid']
         ];
         $json = [
-            'data' => $this->load->view('admin/users/formUser', $data),
+            'data' => $this->hasPermissionJSON($this->modul,'admin/users/formUser', $data),
         ];
         echo json_encode($json);
     }
@@ -139,19 +141,26 @@ class Users extends MY_Controller {
     {
         $validator = array('success' => false, 'messages' => array());
 
-        $uid = $this->input->post('uid');
-        $uids = explode(",", $uid);
+        $status = $this->getModul($this->modul);
+        if($status != 1) {
+            $validator['success'] = false;
+            $validator['messages'] = "Anda tidak mempunyai hak akses";
+        }else{
+            $uid = $this->input->post('uid');
+            $uids = explode(",", $uid);
 
-        if(!empty($uid)) {
-            $delete = $this->users_model->delete($uids);
-            if($delete === true){
-                $validator['success'] = true;
-                $validator['messages'] = "Data berhasil dihapus";
-            }else{
-                $validator['success'] = false;
-                $validator['messages'] = "Error while delete the information into the database";
+            if(!empty($uid)) {
+                $delete = $this->users_model->delete($uids);
+                if($delete === true){
+                    $validator['success'] = true;
+                    $validator['messages'] = "Data berhasil dihapus";
+                }else{
+                    $validator['success'] = false;
+                    $validator['messages'] = "Error while delete the information into the database";
+                }
             }
         }
+
         echo json_encode($validator);
     }
 

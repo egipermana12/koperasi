@@ -23,6 +23,9 @@ showModal = function()
     $.ajax({
         type: "POST",
         url: base_url + "users/new",
+        processData: false, // tell jQuery not to process the data
+        contentType: false,
+        cache: false,
         success: function(res){
             clearLoading();
             $("#tampilModal").html(res);
@@ -42,7 +45,7 @@ editData =  function(){
     if(cek != 1){
         alert_error('Harus Pilih Satu Data');
     }
-    console.log(idPilih);
+    // console.log(idPilih);
 
     loading();
     var formData = new FormData();
@@ -99,8 +102,6 @@ hapusData = function()
                     cache: false,
                     dataType: "JSON",
                     success: function(res){
-                        console.log(res.success);
-                        console.log(res);
                         if(res.success === true) {
                             clearLoading();
                             alert_success(res.messages);
@@ -109,6 +110,7 @@ hapusData = function()
                             getData();
                         }else{
                             alert_error(res.messages);
+                            clearLoading();
                         }
                     },
                     error: function (xhr, ajaxOptions, thrownError) {
