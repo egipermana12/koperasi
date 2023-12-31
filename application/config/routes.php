@@ -58,6 +58,9 @@ $route['anggota'] = 'anggota';
 $route['anggotas'] = 'anggota/view';
 
 $route['getuser'] = 'users/view';
+$route['getSimpanan'] = 'simpanan/view';
+
+$route['simpananview'] = 'Referensi/simpanan/view';
 
 
 $route['404_override'] = '';

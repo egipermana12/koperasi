@@ -11,7 +11,7 @@ class Settings extends MY_Controller {
 		$images = $this->ModelUtama->tampilBanyakBaris('settings_images', "*", array(), "Order By id");
 		$data['settings'] = $settings;
 		$data['images'] = $images;
-		$this->genView('modul_settings','admin/settings/index', $data);
+		$this->hasPermissionView('modul_settings','admin/settings/index', $data);
 	}
 
 	public function store() {

@@ -11299,3 +11299,7 @@ body {
 .border-bottomku {
   border-bottom: 2px solid var(--bs-danger) !important;
 }
+
+.border-dashed {
+  border-style: dashed !important;
+}

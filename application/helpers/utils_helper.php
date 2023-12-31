@@ -28,7 +28,7 @@ function menu_list($menu) {
 			$refs[$val['id_parent']]['children'][$val['id_menu_panel']] = $thisref;
 		}
 	}
-
+	// echo '<pre>'; print_r($list);
 	return $list;
 }
 
@@ -36,6 +36,7 @@ function build_menu($arr_menu, $sub_menu = false) {
 
 	$ci = get_instance();
 	$currentUri = $ci->uri->segment(1);
+	$currentUri2 = $ci->uri->segment(2);
 	$menu = '';
 	foreach ($arr_menu as $key => $val) {
 		if (!$key) {
@@ -43,16 +44,47 @@ function build_menu($arr_menu, $sub_menu = false) {
 		}
 
 		$url = base_url($val['url']);
-
 		$classActive = '';
-		if ($val['url'] == '/' . $currentUri) {
+		$paddingChild = '';
+		$collapsed = 'collapsed';
+		$stexpanded = false;
+		$collapseChild = 'collapse';
+		if ($val['url'] == '/' . $currentUri || $val['url'] == '/' . $currentUri . '/' .$currentUri2) {
 			$classActive = "text-light bg-secondary";
 		}
 
-		$menu .= '<a class="nav-link ' . $classActive . ' " href="' . $url . '">';
-		$menu .= '<div class="sb-nav-link-icon"><i class=" ' . $val['class'] . ' ' . $classActive . ' "></i></div>';
-		$menu .= $val['nama_menu'];
-		$menu .= '</a>';
+		if($val['id_parent'] != 0){
+			$paddingChild = 'padding-left: 2rem !important';
+		}
+
+		if(key_exists('children', $val)){
+			foreach($val['children'] as $ch){
+				if ($ch['url'] == '/' . $currentUri || $ch['url'] == '/' . $currentUri . '/' .$currentUri2) {
+					$collapsed = '';
+					$stexpanded = true;
+					$collapseChild = 'collapse show';
+				}
+			}
+		}
+
+		//if has child
+		if(key_exists('children', $val)){
+			$menu .= '<a class="nav-link '.$collapsed.'" href="#" data-bs-toggle="collapse" data-bs-target="#collapse'.$val['id_menu_kat_panel'].' " aria-expanded="'.$stexpanded.'" aria-controls="collapse'.$val['id_menu_kat_panel'].'">';
+			$menu .= '<div class="sb-nav-link-icon"><i class="' . $val['class'] . '"></i></div>';
+			$menu .= $val['nama_menu'];
+			$menu .= '<div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>';
+			$menu .= '</a>';
+			$menu .= '<div class="'.$collapseChild.'" id="collapse'.$val['id_menu_kat_panel'].'" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">';
+			$menu .= '<nav class="sb-sidenav-menu-nested nav" style="margin-left: 0 !important">';
+			$menu .= build_menu($val['children']);
+			$menu .= '</nav>';
+			$menu .= '</div>';
+		}else{
+			$menu .= '<a class="nav-link ' . $classActive . ' " href="' . $url . '" style="'.$paddingChild.'">';
+			$menu .= '<div class="sb-nav-link-icon"><i class=" ' . $val['class'] . ' ' . $classActive . ' "></i></div>';
+			$menu .= $val['nama_menu'];
+			$menu .= '</a>';
+		}
 	}
 	return $menu;
 }
@@ -104,6 +136,19 @@ function convertStatusHelper($status){
 		default:
 		return "<span class='label label-danger text-center small'></span>";
 	}
+}
+
+function InputTypeHidden($name, $value){
+	return '<input type="hidden" name="' . $name . '" value="' . $value . '" id="' . $name . '"/>';
+}
+
+function InputTypeUang($name, $value,$attr, $style = 'style="text-align:right;"'){
+	$uangx = explode(",", FormatUang($value));
+    $uang = floatval($value) != 0 ? $uangx[0] : "";
+    $uangk = intval($uangx[1]) > 0 ? "," . $uangx[1] : "";
+    return
+        '<input type="text" '.$attr.' onkeypress="return isNumberKey(event)" onkeyup="inputCurrency(`' . $name . '`)" name="' . $name . '_Uang" id="' . $name . '_Uang" value="' . $uang . $uangk . '" ' . $style . ' />' .
+        InputTypeHidden($name, $value);
 }
 
 function InputType($type = "text", $id, $name, $value, $attr) {
@@ -168,4 +213,13 @@ function imageFormDB($image = "", $width = '250px', $height = '160px'){
 	}
 	$content .= "</div>";
 	return $content;
+}
+
+function FormatUang($val){
+	return number_format(floatval($val), 2, ",",".");
+}
+
+function generateRandomNumber($string){
+    $ran = str_pad(rand(1,99999),5,'0',STR_PAD_LEFT);
+    return $string .$ran;
 }

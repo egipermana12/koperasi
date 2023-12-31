@@ -48,8 +48,10 @@ class Auth extends CI_Controller {
 						'level' => $user->level,
 						'status' => $user->status,
 						'modul_anggota' => $user->modul_anggota,
+						'modul_simpanan' => $user->modul_simpanan,
 						'modul_users' => $user->modul_users,
-						'modul_settings' => $user->modul_settings
+						'modul_settings' => $user->modul_settings,
+						'modul_master' => $user->modul_master
 					);
 					$this->session->set_userdata($set_session);
 					$validator['success'] = true;

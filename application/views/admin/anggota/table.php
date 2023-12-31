@@ -2,7 +2,11 @@
 $html = [];
 $btnDiv = "";
 if ($viewOnly) {
-
+    $btnDiv .= '
+    <div class="d-flex justify-content-end align-items-center gap-2">
+        <button id="btnPilih" type="button" class="btn btn-primary text-white btn-sm fw-bold" onclick="getDataAnggota()"><i class="fas fa-user-tag"></i>&nbsp;Pilih Anggota</button>
+    </div>
+    ';
 } else {
     $btnDiv .= '
         <div class="d-flex justify-content-end align-items-center">
@@ -42,20 +46,20 @@ $html[] = '
 </div>
 <div class="row g-3 mb-4">
 <div class="col-12">
-<div class="row justify-content-start">
-<div class="col-4">
+<div class="d-flex justify-content-start align-items-center gap-2">
+<div class="">
 <input type="text" class="form-control form-control-sm" id="qAnggota" value="' . $qAnggota . '" placeholder="Cari Anggota" name="qAnggota" aria-label="First name">
 </div>
-<div class="col-3">
+<div class="">
 <input type="text" value="' . $qTglGabung . '" id="datepicker" class="form-control form-control-sm qTglGabung datepicker" placeholder="Tanggal Gabung" name="qTglGabung">
 </div>
-<div class="col-3">
+<div class="">
 <select class="form-control form-select-sm" id="qStanggota" name="qStanggota" aria-label="Default select example">
 <option value="">Filter Status</option>
 ' . $stSelectOp . '
 </select>
 </div>
-<div class="col-2">
+<div class="">
 <button type="button" onclick="refresh();" class="btn btn-success-25 btn-sm small"><i class="fa fa-refresh"></i>
 Tampilkan</button>
 </div>
@@ -182,6 +186,34 @@ $("#datepicker").datepicker({
                    window.open(res.url, "_blank");
                 }else{
 
+                }
+            }
+        });
+    }
+
+    getDataAnggota = function(){
+        let cek = cekJumlahData();
+        if(cek != 1){
+            alert_error("Harus Pilih Satu Data");
+        }
+        loading();
+        var formData = new FormData();
+        formData.append("id", idPilih);
+        $.ajax({
+            type:"POST",
+            data:formData,
+            url: "' . base_url("anggota/GetData") . '",
+            processData: false,  // tell jQuery not to process the data
+            contentType: false,  // tell jQuery not to set contentType
+            success: function(data) {
+                var res = JSON.parse(data);
+                clearLoading();
+                if(res.error === ""){
+                    getDataAfter(res);
+                    idPilih = "";
+                    DataPilih = 0;
+                }else{
+                    alert_error(res.error);
                 }
             }
         });

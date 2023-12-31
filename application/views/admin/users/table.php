@@ -18,7 +18,11 @@ foreach ($status as $key => $val) {
 $html = [];
 $btnDiv = "";
 if ($viewOnly) {
-
+    $btnDiv .= '
+    <div class="d-flex justify-content-end align-items-center gap-2">
+        <button id="btnDelete" disabled type="button" class="btn btn-secondary text-white btn-sm fw-bold btnDelete" onclick="getData()"><i class="fa fa-trash "></i>&nbsp;Hapus</button>
+    </div>
+    ';
 } else {
     $btnDiv .= '
     <div class="d-flex justify-content-end align-items-center gap-2">

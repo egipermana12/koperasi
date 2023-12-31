@@ -12,9 +12,7 @@ getData = function(pageStart = 0)
         setForm();
     }
     let element = $('#loadElement');
-    getAllData('anggotas', element, Form);
+    getAllData('getSimpanan', element, Form);
 };
 
 getData();
-
-getDataAfter = function(res) {}

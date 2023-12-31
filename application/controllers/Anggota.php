@@ -335,6 +335,17 @@ class Anggota extends MY_Controller {
 		$this->load->view('admin/anggota/cetak', $data);
 	}
 
+	public function GetData(){
+		$err = "";
+        $content = array();
+        $cek = "";
+
+        $id = $this->input->post('id');
+
+        $data = $this->ModelUtama->tampilSatuBaris('anggota', "*", array("id" => $id));
+        echo json_encode(array('content' => $data, 'error' => $err));
+	}
+
 	public function excel(){
 		$objPHPExcel = new PHPExcel();
 		// Set document properties
