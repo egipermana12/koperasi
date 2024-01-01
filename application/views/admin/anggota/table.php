@@ -195,28 +195,31 @@ $("#datepicker").datepicker({
         let cek = cekJumlahData();
         if(cek != 1){
             alert_error("Harus Pilih Satu Data");
-        }
-        loading();
-        var formData = new FormData();
-        formData.append("id", idPilih);
-        $.ajax({
-            type:"POST",
-            data:formData,
-            url: "' . base_url("anggota/GetData") . '",
-            processData: false,  // tell jQuery not to process the data
-            contentType: false,  // tell jQuery not to set contentType
-            success: function(data) {
-                var res = JSON.parse(data);
-                clearLoading();
-                if(res.error === ""){
-                    getDataAfter(res);
-                    idPilih = "";
-                    DataPilih = 0;
-                }else{
-                    alert_error(res.error);
+            idPilih = "";
+            DataPilih = 0;
+        }else{
+            loading();
+            var formData = new FormData();
+            formData.append("id", idPilih);
+            $.ajax({
+                type:"POST",
+                data:formData,
+                url: "' . base_url("anggota/GetData") . '",
+                processData: false,  // tell jQuery not to process the data
+                contentType: false,  // tell jQuery not to set contentType
+                success: function(data) {
+                    var res = JSON.parse(data);
+                    clearLoading();
+                    if(res.error === ""){
+                        getDataAfter(res);
+                        idPilih = "";
+                        DataPilih = 0;
+                    }else{
+                        alert_error(res.error);
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 
     </script>

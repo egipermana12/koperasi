@@ -98,6 +98,7 @@ pilihKecamatan =  function() {
 	});
 }
 
+
 loading = function () {
 	$("#loadingContent").html(
 		'<div class="position-fixed t-0 l-0 w-100 h-100 d-flex justify-content-center align-items-center" style="z-index: 1060; background: rgba(0,0,0,0.1);"><div class="spinner-grow spinner-grow-sm text-danger mx-1" role="status"><span class="sr-only">Loading...</span></div><div class="spinner-grow spinner-grow-sm text-danger mx-1" role="status"><span class="sr-only">Loading...</span></div><div class="spinner-grow spinner-grow-sm text-danger mx-1" role="status"><span class="sr-only">Loading...</span></div></div>'
@@ -145,6 +146,7 @@ setChecklist = function (data) {
 	}
 	setBtnEdit();
 	setBtnDelete();
+	setBtnPrint();
 };
 
 setBtnEdit = function(){
@@ -169,6 +171,19 @@ setBtnDelete = function(){
 	}else{
 		btn.attr('disabled','disabled');
 		btn.removeClass('btn-danger');
+		btn.addClass('btn-secondary');
+	}
+}
+
+setBtnPrint = function(){
+	let btn = $('#btnPrint');
+	if(DataPilih == 1){
+		btn.removeAttr('disabled');
+		btn.addClass('btn-info');
+		btn.removeClass('btn-secondary');
+	}else{
+		btn.attr('disabled','disabled');
+		btn.removeClass('btn-info');
 		btn.addClass('btn-secondary');
 	}
 }

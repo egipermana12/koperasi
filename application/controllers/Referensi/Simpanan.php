@@ -141,6 +141,17 @@ class Simpanan extends MY_Controller {
         echo json_encode($validator);
     }
 
+    public function pilihSimpanan(){
+        $err = "";
+        $content = array();
+        $cek = "";
+
+        $id = $this->input->post('id');
+
+        $data = $this->ModelUtama->tampilSatuBaris('ref_jns_simpanan', "*", array("id" => $id));
+        echo json_encode(array('content' => $data, 'error' => $err));
+    }
+
     public function view($viewOnly = 0){
         $pagePerHalaman = 5;
         $pageStart = 0;

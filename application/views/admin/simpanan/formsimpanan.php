@@ -11,10 +11,10 @@
                 </div>
                 <div class="d-flex justify-cotent-start gap-2 mb-3">
                     <div class="" style="width: 37% !important;">
-                        <?= InputType('text', 'nik', 'nik', "", "class='form-control form-control-sm' placeholder='NIK sesuai KTP' disabled"); ?>
+                        <?= InputType('text', 'nik', 'nik', $nik, "class='form-control form-control-sm' placeholder='NIK sesuai KTP' disabled"); ?>
                     </div>
                     <div class="w-50">
-                        <?= InputType('text', 'nama', 'nama', "", "class='form-control form-control-sm' placeholder='Nama sesuai KTP' disabled "); ?>
+                        <?= InputType('text', 'nama', 'nama', $nama, "class='form-control form-control-sm' placeholder='Nama sesuai KTP' disabled "); ?>
                     </div>
                     <div class="">
                         <a href="javascript:TombolCari();" class="btn btn-sm btn-success form-control form-control-sm"><i class="fas fa-search"></i> <span class="font-weight-bold">Cari</span></a>
@@ -38,7 +38,7 @@
                 </div>
                 <div class="mb-3" style="width: 88%;">
                     <?= LabelInput('ket', 'Keterangan'); ?>
-                    <textarea class="form-control form-control-sm" id="ket" rows="3"></textarea>
+                    <textarea class="form-control form-control-sm" name="ket" id="ket" rows="3"><?= $ket; ?></textarea>
                 </div>
                 <div class="mt-4">
                     <?= InputType('hidden', 'id', 'id', $id, ""); ?>
@@ -120,6 +120,27 @@
         closeModal();
     }
 
+    pilihJnsSimpanan = function(){
+        let id = $('#jns_simpanan').val();
+        let url = "Referensi/simpanan/pilihSimpanan";
+        loading();
+        $.ajax({
+            type:"POST",
+            data:{id: id},
+            url: base_url + url,
+            success: function(data) {
+                var res = JSON.parse(data);
+                clearLoading();
+                if(res.error === ""){
+                    $('#nominal_Uang').val(res.content.nominal);
+                    $('#nominal').val(res.content.nominal);
+                }else{
+                    alert(res.error);
+                }
+            }
+        });
+    }
+
     closeModal = function(){
         $('#closeModal').click();
         idPilih = "";
@@ -159,7 +180,7 @@
             },
             success: function(res) {
                 if (res.success === true) {
-                    alert_confirm('Success', res.messages, 'success', 'anggota');
+                    alert_confirm('Success', res.messages, 'success', 'simpanan');
                 } else {
                     if (res.messages instanceof Object) {
                         $.each(res.messages, function(index, value) {
@@ -174,7 +195,6 @@
                             } else {
                                 key.after(value);
                             }
-
                             if (value.length > 0) {
                                 // Set focus only if the value is invalid
                                 key.focus();
