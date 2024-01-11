@@ -113,7 +113,7 @@ $html[] ='
         Form.append("jns_simpanan_table", $("#jns_simpanan_table").val() );
     }
 
-    setData = function()
+    setDataForm = function()
     {
         setForm();
         getData();
@@ -122,7 +122,7 @@ $html[] ='
     tampilkan = function()
     {
         filter = 1;
-        setData();
+        setDataForm();
     }
 
     PindahHalaman = function(pageStart)

@@ -61,6 +61,7 @@ $route['getuser'] = 'users/view';
 $route['getSimpanan'] = 'simpanan/view';
 
 $route['simpananview'] = 'Referensi/simpanan/view';
+$route['waktuangsuranview'] = 'Referensi/waktuangsuran/view';
 
 
 $route['404_override'] = '';

@@ -221,18 +221,40 @@ class Simpanan extends MY_Controller{
         echo json_encode($json);
     }
 
-    public function generateBukit(){
+    public function cetakBukti(){
+        $validator = array('success' => false, 'messages' => array(), 'content' => array());
+        $ids = $this->input->post('id');
+        $id = explode(",", $ids);
+        if(!empty($ids)){
+            $validator['success'] = true;
+            $validator['content'] = base_url('simpanan/generateBukit/' . join("-",$id));
+        }else{
+            $validator["success"] = false;
+            $validator['messages'] = "id anggota belum dipilih";
+        }
+        echo json_encode($validator);
+    }
+
+
+    public function generateBukit($idAnggota = array()){
         $nmIsntansi = strtoupper($this->ModelUtama->SETTING("NAMA_INSTANSI"));
         $bdnHukum = strtoupper($this->ModelUtama->SETTING("NO_BADAN_HUKUM"));
         $alamat = ucwords($this->ModelUtama->SETTING("ALAMAT"));
+        $alamatTTD = ucwords($this->ModelUtama->SETTING("LOKASI_TTD"));
+        $nmKetua = ucwords($this->ModelUtama->SETTING("NAMA_KETUA"));
 
         error_reporting(0);
         $pdfTemplate = new FPDF('P', 'mm','A4');
         $pdfTemplate->SetLeftMargin(20);
         $pdfTemplate->SetRightMargin(20);
         $pdfTemplate->AddPage();
-        $pdfTemplate->SetFont('Courier','B',12);
-        for($i = 1; $i <= 2; $i++){
+        $pdfTemplate->SetTitle('Cetak Kwitansi Simpanan');
+
+
+        $idAnggotaData = explode("-", $idAnggota);
+        $dataNya = $this->simpanan_model->findByidIn($idAnggotaData);
+        foreach($dataNya as $data) {
+            $pdfTemplate->SetFont('Courier','B',12);
             $pdfTemplate->Cell(0,7,'KOPERASI SIMPAN PINJAM',0,1,'C');
             $pdfTemplate->SetFont('Courier','B',16);
             $pdfTemplate->Ln(-2);
@@ -246,45 +268,46 @@ class Simpanan extends MY_Controller{
             $pdfTemplate->MultiCell(110,4,$alamat,0,'C');
             $pdfTemplate->Cell(0,6,'---------------------------------------------------------------------------------------',0,1,'C');
             $pdfTemplate->Ln(1);
+
             $pdfTemplate->SetFont('Courier','B',12);
             $pdfTemplate->Cell(0,6,'BUKTI SIMPANANAN ANGGOTA',0,1,'C');
             $pdfTemplate->Ln(1);
             $pdfTemplate->Cell(50,6,'NOMOR TRANSAKSI',0,0,'L');
             $pdfTemplate->Cell(5,6,':',0,0,'C');
-            $pdfTemplate->Cell(110,6,'TSA012384',0,1,'L');
+            $pdfTemplate->Cell(110,6,$data["no_simpanan"],0,1,'L');
             $pdfTemplate->Cell(50,6,'NIK ANGGOTA',0,0,'L');
             $pdfTemplate->Cell(5,6,':',0,0,'C');
-            $pdfTemplate->Cell(110,6,'320919394857',0,1,'L');
+            $pdfTemplate->Cell(110,6,$data["nik"],0,1,'L');
             $pdfTemplate->Cell(50,6,'NAMA ANGGOTA',0,0,'L');
             $pdfTemplate->Cell(5,6,':',0,0,'C');
-            $pdfTemplate->Cell(110,6,'BAIM WONG WING WUNG',0,1,'L');
+            $pdfTemplate->Cell(110,6,$data["nama"],0,1,'L');
             $pdfTemplate->Cell(50,6,'TANGGAL TRANSAKSI',0,0,'L');
             $pdfTemplate->Cell(5,6,':',0,0,'C');
-            $pdfTemplate->Cell(110,6,'24 DESEMBER 2023',0,1,'L');
+            $pdfTemplate->Cell(110,6,$data["tgl_transaksi"],0,1,'L');
             $pdfTemplate->Cell(50,6,'JENIS SIMPANAN',0,0,'L');
             $pdfTemplate->Cell(5,6,':',0,0,'C');
-            $pdfTemplate->Cell(110,6,'SIMPANAN POKOK',0,1,'L');
+            $pdfTemplate->Cell(110,6,$data["jns_simpanan"],0,1,'L');
             $pdfTemplate->Cell(50,6,'NOMINAL',0,0,'L');
             $pdfTemplate->Cell(5,6,':',0,0,'C');
-            $pdfTemplate->Cell(110,6,'RP. 150.000,00',0,1,'L');
+            $pdfTemplate->Cell(110,6,FormatUang($data["nominal"]),0,1,'L');
             $pdfTemplate->Cell(50,6,'TERBILANG',0,0,'L');
             $pdfTemplate->Cell(5,6,':',0,0,'C');
-            $pdfTemplate->Cell(110,6,'SERATUS LIMA PULUH RIBU RUPIAH',0,1,'L');
+            $pdfTemplate->Cell(110,6,terbilang($data["nominal"]),0,1,'L');
             $pdfTemplate->Ln(3);
-            $pdfTemplate->Cell(0,6,'Kuningan, 02 Januari 2024',0,1,'R');
+            $pdfTemplate->Cell(0,6,$alamatTTD .', '. tgl_long(date("Y-m-d")),0,1,'R');
             $pdfTemplate->Cell(70,6,'NASABAH',0,0,'C');
             $pdfTemplate->Cell(30,5,'',0,0,'C');
             $pdfTemplate->Cell(70,6,'BENDAHARA',0,1,'C');
-            $pdfTemplate->Ln(10);
-            $pdfTemplate->Cell(70,6,'JONI',0,0,'C');
+            $pdfTemplate->Ln(12);
+            $pdfTemplate->Cell(70,6,$data["nama"],0,0,'C');
             $pdfTemplate->Cell(30,5,'',0,0,'C');
-            $pdfTemplate->Cell(70,6,'SUGENG',0,1,'C');
+            $pdfTemplate->Cell(70,6,$nmKetua,0,1,'C');
             $pdfTemplate->Ln(1);
             $pdfTemplate->SetFont('Courier','B',9);
             $pdfTemplate->Cell(0,6,'---------------------------------------------------------------------------------------',0,1,'C');
-            $pdfTemplate->Ln(4);
+            $pdfTemplate->Ln(8);
         }
-        $pdfTemplate->Output();
+        $pdfTemplate->Output("I", "kwitansi_simpanan.pdf");
     }
 
 }

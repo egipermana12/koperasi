@@ -31,6 +31,16 @@ class Simpanan_model extends CI_Model{
         return $result;
     }
 
+    public function findByidIn($id){
+        $generate = $this->db
+                    ->select($this->table.'.*, b.nik, b.nama, c.jns_simpanan, c.nominal as nomial_ref')
+                    ->join('anggota as b', 'b.id = ' .$this->table. '.id_anggota')
+                    ->join('ref_jns_simpanan as c', 'c.id = ' .$this->table. '.refid_jns_simpanan')
+                    ->where_in($this->table.'.id', $id)
+                    ->get($this->table)->result_array();
+        return $generate;
+    }
+
     public function create()
     {
         $post = $this->input->post(NULL, TRUE);

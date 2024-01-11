@@ -177,7 +177,7 @@ setBtnDelete = function(){
 
 setBtnPrint = function(){
 	let btn = $('#btnPrint');
-	if(DataPilih == 1){
+	if(DataPilih > 0){
 		btn.removeAttr('disabled');
 		btn.addClass('btn-info');
 		btn.removeClass('btn-secondary');

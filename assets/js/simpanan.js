@@ -85,3 +85,57 @@ hapusData = function()
         });
     }
 }
+
+printData = function (){
+    let cek = cekJumlahData();
+    var formData = new FormData();
+        formData.append('id', idPilih);
+    if(cek < 0){
+        alert_error('Data belum dipilih');
+    }else{
+        Swal.fire({
+        title: "Print Bukti Simpanan",
+        text: "Print " + cek + " Bukti ?",
+        icon: 'info',
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: 'Ya, Print',
+        cancelButtonText: 'Tidak',
+        allowOutsideClick: false,
+        allowEscapeKey: false
+        }).then((result) => {
+            if(result.isConfirmed){
+                loading();
+                $.ajax({
+                    type: "POST",
+                    url: base_url + "simpanan/cetakBukti",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    cache: false,
+                    dataType: "JSON",
+                    success: function(res){
+                        if(res.success === true) {
+                            clearLoading();
+                            window.open(res.content);
+                            idPilih = "";
+                            DataPilih = 0;
+                        }else{
+                            alert_error(res.messages);
+                            clearLoading();
+                        }
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                        alert(
+                            xhr.status + "\n" + xhr.responseText + "\n" + thrownError,
+                        );
+                    },
+                });
+            }else{
+                idPilih = "";
+                DataPilih = cek;
+            }
+        });
+    }
+}
