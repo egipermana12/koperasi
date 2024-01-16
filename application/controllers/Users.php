@@ -92,7 +92,7 @@ class Users extends MY_Controller {
     }
 
     public function update(){
-        $unique = "";
+        $rules = "";
         $id = $this->input->post('id');
         if(!empty($id)){
             $getData = $this->ModelUtama->tampilSatuBaris('users', "*", array("uid" => $id));
@@ -109,7 +109,7 @@ class Users extends MY_Controller {
             array(
                 'field' => 'uid',
                 'label' => 'username',
-                'rules' => $unique
+                'rules' => $rules
             ),
             array(
                 'field' => 'nama',

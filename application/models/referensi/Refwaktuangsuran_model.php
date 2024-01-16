@@ -24,4 +24,33 @@ class Refwaktuangsuran_model extends CI_Model
 
         return $result;
     }
+
+    public function create()
+    {
+        $post = $this->input->post(NULL, TRUE);
+        $insertData = array(
+            'lama_bulan' => $post["lama_bulan"],
+            'aktif' => $post["aktif"]
+        );
+        $result = $this->db->insert($this->table, $insertData);
+        return $result;
+    }
+
+    public function update($id){
+        $post = $this->input->post(NULL, TRUE);
+        $insertData = array(
+            'lama_bulan' => $post["lama_bulan"],
+            'aktif' => $post["aktif"]
+        );
+        $this->db->where('id', $id);
+        $result = $this->db->update($this->table, $insertData);
+        return $result;
+    }
+
+    public function delete($id = array())
+    {
+        $this->db->where_in('id', $id);
+        $result = $this->db->delete($this->table);
+        return $result;
+    }
 }
