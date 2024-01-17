@@ -22,6 +22,30 @@ $(document).ready(function () {
 		buttonImageOnly: true,
 	});
 
+	$(".jqueryui-marker-datepicker")
+	  .wrap('<div class="input-group">')
+	  .datepicker({
+	    dateFormat: "yy-mm-dd",
+		changeMonth: true,
+		changeYear: true,
+		yearRange: "-30:+00",
+		showOn: "button",
+		buttonImage: "/assets/vendors/jquery-ui/images/calendar.gif",
+		buttonImageOnly: true,
+	  })
+	  .next("button").button({
+	    icons: { primary: "ui-icon-calendar" },
+	    label: "Select a date",
+	    text: false
+	  })
+	  .addClass("btn btn-default")
+	  .wrap('<span class="input-group-btn">')
+	  .find('.ui-button-text')
+	  .css({
+	    'visibility': 'hidden',
+	    'display': 'inline'
+	  });
+
 	$('#kode_kecamatan').select2();
 	$('#kode_kelurahan').select2();
 

@@ -51,7 +51,7 @@ $html[] = '
 <input type="text" class="form-control form-control-sm" id="qAnggota" value="' . $qAnggota . '" placeholder="Cari Anggota" name="qAnggota" aria-label="First name">
 </div>
 <div class="">
-<input type="text" value="' . $qTglGabung . '" id="datepicker" class="form-control form-control-sm qTglGabung datepicker" placeholder="Tanggal Gabung" name="qTglGabung">
+<input type="text" value="' . $qTglGabung . '" id="datepicker" class="form-control form-control-sm qTglGabung" placeholder="Tanggal Gabung" name="qTglGabung">
 </div>
 <div class="">
 <select class="form-control form-select-sm" id="qStanggota" name="qStanggota" aria-label="Default select example">

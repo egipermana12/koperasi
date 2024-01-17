@@ -59,6 +59,7 @@ $route['anggotas'] = 'anggota/view';
 
 $route['getuser'] = 'users/view';
 $route['getSimpanan'] = 'simpanan/view';
+$route['pengajuanpinjamanview'] = 'Pinjaman/pengajuan/view';
 
 $route['simpananview'] = 'Referensi/simpanan/view';
 $route['waktuangsuranview'] = 'Referensi/waktuangsuran/view';

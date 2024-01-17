@@ -164,7 +164,7 @@ function Div($class, $element) {
 }
 
 
-function cmbQuery($id, $value, $query, $col1, $col2, $style, $labelAtas, $valueAtas, $pilihanAtas = 1, $withCodeInValue = 1, $withDataJSON = 0){
+function cmbQuery($id, $value, $query, $col1, $col2, $style, $labelAtas, $valueAtas, $pilihanAtas = 1, $withCodeInValue = 1, $withDataJSON = 0, $withText =""){
 	$konten = '<select id="'.$id.'" name="'.$id.'" '.$style.' >';
 	if($pilihanAtas) {
 		$konten .= '<option value="'.$valueAtas.'">'.$labelAtas.'</option>';
@@ -178,7 +178,7 @@ function cmbQuery($id, $value, $query, $col1, $col2, $style, $labelAtas, $valueA
 		$selected = $value == $dt[$col1] ? "selected='selected'" : "";
 		$valueData = $withCodeInValue == 1 ? $dt[$col1].". ".$dt[$col2] : $dt[$col2];
 
-		$konten .= "<option value=".$dt[$col1]." ".$selected.">".$valueData."</option>";
+		$konten .= "<option value=".$dt[$col1]." ".$selected.">".$valueData." ".$withText."</option>";
 		$dataN[$dt[$col1]] = $dt;
 	}
 	$konten .="</select>";

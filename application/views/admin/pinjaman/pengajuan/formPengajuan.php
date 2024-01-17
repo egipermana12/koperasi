@@ -1,12 +1,13 @@
 <div class="container-fluid px-4">
-    <div class="card my-4" style="width: 60%;">
+    <div class="card my-4" style="width: 70%;">
         <div class="card-header">
             <i class="fas fa-table me-1"></i>
             <?= $judul; ?>
         </div>
         <div class="card-body">
-            <form id="simpananForm" name="simpananForm" enctype="multipart/form-data">
-                <div class="">
+            <form id="pengajuanForm" name="pengajuanForm" enctype="multipart/form-data">
+                <div class="modal-body px-4" style="overflow-y: auto;">
+                    <div class="">
                     <?= LabelInput('nik', 'Data Anggota'); ?>
                 </div>
                 <div class="d-flex justify-cotent-start gap-2 mb-3">
@@ -21,19 +22,21 @@
                     </div>
                 </div>
                 <div class="mb-3">
-                    <?= LabelInput('no_simpanan', 'Nomor Transaksi'); ?>
-                    <?= InputType('text', 'no_simpanan', 'no_simpanan', $no_simpanan, "class='form-control form-control-sm' placeholder='Nomor Simpanan' disabled style='width: 88% !important;' "); ?>
+                    <?= LabelInput('no_pengajuan', 'Nomor Pengajuan'); ?>
+                    <?= InputType('text', 'no_pengajuan', 'no_pengajuan', $no_pengajuan, "class='form-control form-control-sm' placeholder='Nomor Simpanan' disabled style='width: 88% !important;' "); ?>
                 </div>
-                <div class="mb-3" style="width: 30%;">
-                    <?= LabelInput('tgl_transaksi', 'Tanggal Transaksi', '*'); ?>
-                    <?= InputType('text', 'tgl_transaksi', 'tgl_transaksi', $tgl_transaksi, "class='form-control form-control-sm tgl_datepicker' placeholder='Tanggal Transaksi'"); ?>
+                <div class="mb-3" style="width: 40%;">
+                    <?= LabelInput('tgl_pengajuan', 'Tanggal Transaksi', '*'); ?>
+                    <div class="input-group mb-3">
+                      <?= InputType('text', 'tgl_pengajuan', 'tgl_pengajuan', $tgl_pengajuan, "class='form-control form-control-sm jqueryui-marker-datepicker' placeholder='Tanggal Transaksi'"); ?>
+                    </div>
                 </div>
                 <div class="mb-3">
-                    <?= LabelInput('simpanan', 'Pilih Jenis Simpanan'); ?>
-                    <?= $refid_jns_simpanan; ?>
+                    <?= LabelInput('waktuangsuran', 'Pilih Lama Angsuran'); ?>
+                    <?= $refid_waktu_angsuran; ?>
                 </div>
                 <div class="mb-3" style="width: 50%;">
-                    <?= LabelInput('nominal', 'Nominal Simpanan'); ?>
+                    <?= LabelInput('nominal', 'Nominal Pinjaman'); ?>
                     <?= InputTypeUang('nominal', $nominal, "class='form-control form-control-sm' placeholder='Masukan Nominal'"); ?>
                 </div>
                 <div class="mb-3" style="width: 88%;">
@@ -120,48 +123,26 @@
         closeModal();
     }
 
-    pilihJnsSimpanan = function(){
-        let id = $('#jns_simpanan').val();
-        let url = "Referensi/simpanan/pilihSimpanan";
-        loading();
-        $.ajax({
-            type:"POST",
-            data:{id: id},
-            url: base_url + url,
-            success: function(data) {
-                var res = JSON.parse(data);
-                clearLoading();
-                if(res.error === ""){
-                    $('#nominal_Uang').val(res.content.nominal);
-                    $('#nominal').val(res.content.nominal);
-                }else{
-                    alert(res.error);
-                }
-            }
-        });
-    }
-
     closeModal = function(){
         $('#closeModal').click();
         idPilih = "";
         DataPilih = 0;
     }
 
-    $('#simpananForm').on('submit', function(e) {
+    $('#pengajuanForm').on('submit', function(e) {
         let url;
         let id = $('#id').val();
         if(id == "" || id == 0){
-            url = base_url + 'simpanan/store';
+            url = base_url + 'Pinjaman/pengajuan/store';
         }else{
-            url = base_url + 'simpanan/update';
+            url = base_url + 'Pinjaman/pengajuan/update';
         }
         e.preventDefault();
         let data = new FormData(this);
-        data.append('no_simpanan', $('#no_simpanan').val());
+        data.append('no_pengajuan', $('#no_pengajuan').val());
         data.append('nama', $('#nama').val());
         data.append('nik', $('#nik').val());
 
-        // console_form(data);
         $.ajax({
             type: "POST",
             url: url,
@@ -180,7 +161,7 @@
             },
             success: function(res) {
                 if (res.success === true) {
-                    alert_confirm('Success', res.messages, 'success', 'simpanan');
+                    alert_confirm('Success', res.messages, 'success', 'Pinjaman/pengajuan');
                 } else {
                     if (res.messages instanceof Object) {
                         $.each(res.messages, function(index, value) {
@@ -190,9 +171,12 @@
                             .removeClass('is-valid')
                             .addClass(value.length > 0 ? 'is-invalid' : 'is-valid')
                             .siblings('.text-danger').remove();
-                            if (key.hasClass('tgl_datepicker')) {
+                            if (key.hasClass('jqueryui-marker-datepicker')) {
                                 key.next('.ui-datepicker-trigger').after(value);
-                            } else {
+                            }else if(index == "nominal"){
+                                key.after("");
+                            }
+                            else {
                                 key.after(value);
                             }
                             if (value.length > 0) {

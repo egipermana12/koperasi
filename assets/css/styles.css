@@ -107,11 +107,12 @@ body {
 }
 
 
-.ui-datepicker-trigger{
-  float: right;
-  margin-top: -24px;
-  margin-right: 14px;
+img.ui-datepicker-trigger {
+  margin-top: 6px;
+  margin-left: 12px;
   cursor: pointer;
+  width: 20px;
+  height: 20px;
 }
 
 hr {

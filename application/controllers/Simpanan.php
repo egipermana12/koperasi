@@ -263,13 +263,13 @@ class Simpanan extends MY_Controller{
             $pdfTemplate->SetFont('Courier','B',11);
             $pdfTemplate->Cell(0,6,$bdnHukum,0,1,'C');
             $pdfTemplate->Ln(-1);
-            $pdfTemplate->SetFont('Courier','B',9);
+            $pdfTemplate->SetFont('Courier','',9);
             $pdfTemplate->Cell(30,5,'',0,0,'C');
             $pdfTemplate->MultiCell(110,4,$alamat,0,'C');
             $pdfTemplate->Cell(0,6,'---------------------------------------------------------------------------------------',0,1,'C');
             $pdfTemplate->Ln(1);
 
-            $pdfTemplate->SetFont('Courier','B',12);
+            $pdfTemplate->SetFont('Courier','',12);
             $pdfTemplate->Cell(0,6,'BUKTI SIMPANANAN ANGGOTA',0,1,'C');
             $pdfTemplate->Ln(1);
             $pdfTemplate->Cell(50,6,'NOMOR TRANSAKSI',0,0,'L');

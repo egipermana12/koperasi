@@ -49,6 +49,7 @@ class Auth extends CI_Controller {
 						'status' => $user->status,
 						'modul_anggota' => $user->modul_anggota,
 						'modul_simpanan' => $user->modul_simpanan,
+						'modul_pinjaman' => $user->modul_pinjaman,
 						'modul_users' => $user->modul_users,
 						'modul_settings' => $user->modul_settings,
 						'modul_master' => $user->modul_master
