@@ -47,4 +47,27 @@ class Pengajuan_model extends CI_Model{
         return $result;
     }
 
+    public function update($id)
+    {
+        $post = $this->input->post(NULL, TRUE);
+        $update_data = array(
+            'id_anggota' => $post["id_anggota"],
+            'tgl_pengajuan' => $post["tgl_pengajuan"],
+            'refid_waktu_angsuran' => $post["lama_bulan"],
+            'ket' => $post["ket"],
+            'nominal' => $post["nominal"],
+            'uid_create' => $this->session->userdata['username']
+        );
+        $this->db->where('id', $id);
+        $result = $this->db->update($this->table, $update_data);
+        return $result;
+    }
+
+    public function delete($id = array())
+    {
+        $this->db->where_in('id', $id);
+        $result = $this->db->delete($this->table);
+        return $result;
+    }
+
 }

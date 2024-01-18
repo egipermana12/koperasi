@@ -1,3 +1,7 @@
+<?php
+    $disabled = 'disabled';
+    $status_pencairan == "sudah" ? $disabled = 'disabled' : $disabled = '';
+?>
 <div class="container-fluid px-4">
     <div class="card my-4" style="width: 70%;">
         <div class="card-header">
@@ -5,6 +9,9 @@
             <?= $judul; ?>
         </div>
         <div class="card-body">
+            <?php if($status_pencairan == "sudah") {
+                echo '<div class="alert alert-danger small" role="alert">Data tidak bisa diubah, sudah pencairan!</div>';
+            } ?>
             <form id="pengajuanForm" name="pengajuanForm" enctype="multipart/form-data">
                 <div class="modal-body px-4" style="overflow-y: auto;">
                     <div class="">
@@ -28,7 +35,7 @@
                 <div class="mb-3" style="width: 40%;">
                     <?= LabelInput('tgl_pengajuan', 'Tanggal Transaksi', '*'); ?>
                     <div class="input-group mb-3">
-                      <?= InputType('text', 'tgl_pengajuan', 'tgl_pengajuan', $tgl_pengajuan, "class='form-control form-control-sm jqueryui-marker-datepicker' placeholder='Tanggal Transaksi'"); ?>
+                      <?= InputType('text', 'tgl_pengajuan', 'tgl_pengajuan', $tgl_pengajuan, "class='form-control form-control-sm jqueryui-marker-datepicker' placeholder='Tanggal Transaksi' $disabled "); ?>
                     </div>
                 </div>
                 <div class="mb-3">
@@ -37,16 +44,16 @@
                 </div>
                 <div class="mb-3" style="width: 50%;">
                     <?= LabelInput('nominal', 'Nominal Pinjaman'); ?>
-                    <?= InputTypeUang('nominal', $nominal, "class='form-control form-control-sm' placeholder='Masukan Nominal'"); ?>
+                    <?= InputTypeUang('nominal', $nominal, "class='form-control form-control-sm' placeholder='Masukan Nominal' $disabled"); ?>
                 </div>
                 <div class="mb-3" style="width: 88%;">
                     <?= LabelInput('ket', 'Keterangan'); ?>
-                    <textarea class="form-control form-control-sm" name="ket" id="ket" rows="3"><?= $ket; ?></textarea>
+                    <textarea class="form-control form-control-sm" name="ket" id="ket" rows="3" <?=$disabled ?>><?= $ket; ?></textarea>
                 </div>
                 <div class="mt-4">
                     <?= InputType('hidden', 'id', 'id', $id, ""); ?>
                     <?= InputType('hidden', 'id_anggota', 'id_anggota', $id_anggota, ""); ?>
-                    <a class="btn btn-sm btn-danger fw-semibold px-3" href="<?= base_url('simpanan') ?>"><i class='fas fa-fw fa fa-times'></i>&nbspBatal</a>
+                    <a class="btn btn-sm btn-danger fw-semibold px-3" href="<?= base_url('Pinjaman/pengajuan') ?>"><i class='fas fa-fw fa fa-times'></i>&nbspBatal</a>
                     <button type="submit" class="btn btn-sm btn-success fw-semibold px-3 btnSimpan" id="btnSimpan"><i class='fas fa-fw fa-save'></i>&nbspSimpan</button>
                 </div>
             </form>
