@@ -234,4 +234,75 @@ class Pengajuan extends MY_Controller {
         echo json_encode($json);
     }
 
+    public function setujui()
+    {
+        $id = $this->input->post('id');
+        $getData = $this->ModelUtama->tampilSatuBaris('t_pinjaman_pengajuan', "*", array("id" => $id));
+        $data = array(
+            'judul' => 'Pengajuan Disetujui',
+            'id' => $getData['id'],
+            'no_pengajuan' => $getData['no_pengajuan'],
+            'status' => $getData['status'],
+            'status_pencairan' => $getData['status_pencairan'],
+            'tgl_pencairan' => $getData['tgl_pencairan'],
+            'penerima_uang' => $getData['penerima_uang']
+        );
+        $json = [
+            'data' => $this->hasPermissionJSON($this->modul,'admin/pinjaman/pengajuan/modalPengajuan', $data),
+        ];
+
+        echo json_encode($json);
+    }
+
+    public function setujuiAction()
+    {
+        $status = $this->input->post('status');
+        $id = $this->input->post('id');
+        $validator = array('success' => false, 'messages' => array());
+
+
+        $validate_data = array(
+            array(
+                'field' => 'status',
+                'label' => 'Status Pengajuan',
+                'rules' => 'required',
+            ),
+            array(
+                'field' => 'status_pencairan',
+                'label' => 'Status Pencairan',
+                'rules' => 'required',
+            ),
+            array(
+                'field' => 'tgl_pengajuan',
+                'label' => 'Tanggal Pengajuan',
+                'rules' => 'required',
+            ),
+            array(
+                'field' => 'penerima_uang',
+                'label' => 'Penerima Pencarian',
+                'rules' => 'required',
+            ),
+        );
+
+
+        $this->form_validation->set_rules($validate_data);
+        $this->form_validation->set_error_delimiters('<p class="text-danger" style="font-size: 12px; font-weight: 500;">', '</p>');
+        if ($this->form_validation->run() === true) {
+            $save = $this->pengajuan_model->updatePengajuan($id);
+            if ($save == true) {
+                $validator['success'] = true;
+                $validator['messages'] = "Data berhasil disimpan";
+            } else {
+                $validator['success'] = false;
+                $validator['messages'] = "Error while inserting the information into the database";
+            }
+        }else{
+            $validator['success'] = false;
+            foreach ($_POST as $key => $value) {
+                $validator['messages'][$key] = form_error($key);
+            }
+        }
+        echo json_encode($validator);
+    }
+
 }

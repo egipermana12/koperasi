@@ -8,27 +8,29 @@ if ($viewOnly) {
 } else {
     $btnDiv .= '
     <div class="d-flex justify-content-end align-items-center gap-1">
-        <button id="btnPrint" disabled type="button" class="btn btn-secondary text-white btn-sm fw-bold btnPrint" onclick="printData()" data-bs-toggle="tooltip" data-bs-placement="top" title="Print Kwitansi"><i class="fa fa-print "></i></button>
-        <button id="btnDelete" disabled type="button" class="btn btn-secondary text-white btn-sm fw-bold btnDelete" onclick="hapusData()"><i class="fa fa-trash" data-bs-toggle="tooltip" data-bs-placement="top" title="Hapus Data"></i></button>
-        <button id="btnEdit" disabled type="button" class="btn btn-secondary text-white btn-sm fw-bold btnEdit" onclick="editData();" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit Data"><i class="fa fa-pencil fs-6"></i></button>
-        <a href="'. base_url('Pinjaman/pengajuan/create') . '"><button type="button" class="btn btn-primary text-white btn-sm fw-bold"><i class="fa fa-plus fs-5" data-bs-toggle="tooltip" data-bs-placement="top" title="Data Baru"></i></button></a>
+        <button id="btnAcc" disabled type="button" class="btn btn-secondary text-white btn-sm fw-bold btnAcc" onclick="accData()" data-bs-toggle="tooltip" data-bs-placement="top" title="acc Pinjaman"><i class="fa fa-stamp "></i><span class="small">&nbsp;ACC Pinjaman</span></button>
+        <button id="btnDelete" disabled type="button" class="btn btn-secondary text-white btn-sm fw-bold btnDelete" onclick="hapusData()"><i class="fa fa-trash" data-bs-toggle="tooltip" data-bs-placement="top" title="Hapus Data"></i><span class="small">&nbsp;Delete</span></button>
+        <button id="btnEdit" disabled type="button" class="btn btn-secondary text-white btn-sm fw-bold btnEdit" onclick="editData();" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit Data"><i class="fa fa-pencil fs-6"></i><span class="small">&nbsp;Edit</span></button>
+        <a href="'. base_url('Pinjaman/pengajuan/create') . '"><button type="button" class="btn btn-primary text-white btn-sm fw-bold"><i class="fa fa-plus fs-5" data-bs-toggle="tooltip" data-bs-placement="top" title="Data Baru"></i><span class="small">&nbsp;Add</span></button></a>
     </div>
     ';
 };
 
 $html[] = '
 <div class="card my-4">
-    <div class="card-body">
-        <div class="row mb-4 align-items-center">
+        <div class="card-header">
             <div class="col-6">
-                <h5 class="text-gray-800">Data Pengajuan Pinjaman Anggota</h5>
+                <h6 class="text-gray-800">Data Pengajuan Pinjaman Anggota</h6>
             </div>
-            <div class="col-6">
+        </div>
+    <div class="card-body">
+
+        <div class="row mb-4 align-items-center justify-content-end">
+            <div class="col-12">
                 ' . $btnDiv . '
             </div>
         </div>
         <div class="d-flex justify-content-start align-items-center gap-2">
-
         </div>
         <div class="my-4 overflow-x-auto">
             <table class="table table-sm table-striped table-hover table-bordered table-responsive">

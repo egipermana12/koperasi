@@ -171,10 +171,24 @@ setChecklist = function (data) {
 	setBtnEdit();
 	setBtnDelete();
 	setBtnPrint();
+	setBtnAcc();
 };
 
 setBtnEdit = function(){
 	let btn = $('#btnEdit');
+	if(DataPilih == 1){
+		btn.removeAttr('disabled');
+		btn.addClass('btn-warning');
+		btn.removeClass('btn-secondary');
+	}else{
+		btn.attr('disabled','disabled');
+		btn.removeClass('btn-warning');
+		btn.addClass('btn-secondary');
+	}
+}
+
+setBtnAcc = function(){
+	let btn = $('#btnAcc');
 	if(DataPilih == 1){
 		btn.removeAttr('disabled');
 		btn.addClass('btn-warning');
@@ -211,6 +225,7 @@ setBtnPrint = function(){
 		btn.addClass('btn-secondary');
 	}
 }
+
 
 cekJumlahData = function () {
 	var jmlData = 0;
