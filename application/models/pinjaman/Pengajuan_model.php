@@ -70,4 +70,18 @@ class Pengajuan_model extends CI_Model{
         return $result;
     }
 
+    public function updatePengajuan($id){
+        $post = $this->input->post(NULL, TRUE);
+        $update_data = array(
+            'status' => $post["status"],
+            'status_pencairan' => $post["status_pencairan"],
+            'tgl_pencairan' => $post["tgl_pencairan"],
+            'penerima_uang' => $post["penerima_uang"],
+            'uid_update' => $this->session->userdata['username']
+        );
+        $this->db->where('id', $id);
+        $result = $this->db->update($this->table, $update_data);
+        return $result;
+    }
+
 }

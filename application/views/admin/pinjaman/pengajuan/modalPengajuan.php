@@ -43,9 +43,9 @@
               </div>
             </div>
             <div class="mb-3" style="width: 40%;">
-              <?= LabelInput('tgl_pengajuan', 'Tanggal Transaksi', '*'); ?>
+              <?= LabelInput('tgl_pencairan', 'Tanggal Transaksi', '*'); ?>
               <div class="input-group mb-3">
-                <?= InputType('text', 'tgl_pengajuan', 'tgl_pengajuan', $tgl_pencairan, "class='form-control form-control-sm jqueryui-marker-datepicker' placeholder='Tanggal Transaksi' "); ?>
+                <?= InputType('text', 'tgl_pencairan', 'tgl_pencairan', $tgl_pencairan, "class='form-control form-control-sm jqueryui-marker-datepicker' placeholder='Tanggal Transaksi' "); ?>
               </div>
             </div>
             <div class="mb-3" style="width: 40%;">
@@ -67,7 +67,11 @@
 <script src="<?=base_url('assets/js/scripts.js') . '?v=' . time();?> "></script>
 <script>
 
-  $('#show').hide();
+  if($('#acc').is(':checked')){
+    $('#show').show();
+  }else{
+    $('#show').hide();
+  }
 
   $('input[type=radio][name=status]').change(function() {
     var selectedValue = this.value;
@@ -113,7 +117,11 @@
               .addClass(value.length > 0 ? 'is-invalid' : 'is-valid')
               .siblings('.text-danger').remove();
 
-              key.after(value);
+              if (key.hasClass('jqueryui-marker-datepicker')) {
+                key.closest('.input-group').after(value);
+              } else {
+                key.after(value);
+              }
 
               if (value.length > 0) {
                 // Set focus only if the value is invalid
@@ -132,14 +140,14 @@
   // remove modal
   $('#staticBackdrop').on('hidden.bs.modal', function () {
     $('.modal').remove();
-    idPilih = "";
+    let cek = cekJumlahData();
+    console.log(cek);
     DataPilih = 0;
+    idPilih = "";
   });
 
   function removeModal(){
     $('#batal').click();
-    idPilih = "";
-    DataPilih = 0;
   }
 
 </script>

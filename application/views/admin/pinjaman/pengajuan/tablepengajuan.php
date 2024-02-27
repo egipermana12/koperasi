@@ -42,6 +42,7 @@ $html[] = '
                         <th class="text-center align-middle" width="40pt">Nominal</th>
                         <th class="text-center align-middle" width="20pt">Lama Angsuran (Bulan)</th>
                         <th class="text-center align-middle" width="20pt">Status</th>
+                        <th class="text-center align-middle" width="20pt">Status Pencairan</th>
                     </tr>
                 </thead>
                 <tbody>';
@@ -55,6 +56,7 @@ if(count($pengajuanAnggota) > 0) {
                         <td class="text-body-tertiary text-end">'.formatUang($value["nominal"]).' </td>
                         <td class="text-body-tertiary text-center">'.$value["lama_bulan"].' </td>
                         <td class="text-body-tertiary text-center" style="font-size: 13px;">'.convertStatus($value["status"]).' </td>
+                        <td class="text-body-tertiary text-center">'.$value["status_pencairan"].' </td>
                     </tr>
         ';
     }

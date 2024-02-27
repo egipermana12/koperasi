@@ -157,17 +157,18 @@ getAllData = function (url, contentElement, data) {
  * start handle checkbox global
  */
 
-DataPilih = 0;
-idPilih = "";
+var DataPilih = 0;
+var idPilih = "";
 
 setChecklist = function (data) {
-	if (data.checked == true) {
+	if (data.checked) {
 		DataPilih++;
 	} else {
-		if(DataPilih > 0){
-			DataPilih--;
-		}
+		if (DataPilih > 0) {
+            DataPilih--;
+        }
 	}
+
 	setBtnEdit();
 	setBtnDelete();
 	setBtnPrint();
@@ -228,10 +229,10 @@ setBtnPrint = function(){
 
 
 cekJumlahData = function () {
-	var jmlData = 0;
-	cb = document.getElementsByName("check");
+	let jmlData = 0;
+	const cb = document.getElementsByName("check");
 	for (let i = 0; i < cb.length; i++) {
-		if (cb[i].checked == true) {
+		if (cb[i].checked) {
 			if (i != 0 && jmlData > 0) {
 				idPilih += ",";
 			}
@@ -247,21 +248,17 @@ AfterChekedAll = function (data) {
 };
 
 checkedAll = function () {
-	checkAll = document.getElementById("check-all");
-	checkboxes = document.getElementsByName("check");
+	const checkAll = document.getElementById("check-all");
+	const checkboxes = document.getElementsByName("check");
 	if (checkAll) {
-		isChecked = checkAll.checked;
+		const isChecked = checkAll.checked;
 		for (let i = 0; i < checkboxes.length; i++) {
-			setData = true;
-			if (isChecked && checkboxes[i].checked) {
-				setData = false;
-			}
-			if (!isChecked && !checkboxes[i].checked) {
-				setData = false;
-			}
 			checkboxes[i].checked = isChecked;
-			if (setData) {
+			if (isChecked) {
 				AfterChekedAll(checkboxes[i]);
+			}else{
+				DataPilih = 0;
+				idPilih ="";
 			}
 		}
 	}

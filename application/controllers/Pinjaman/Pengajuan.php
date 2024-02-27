@@ -254,38 +254,55 @@ class Pengajuan extends MY_Controller {
         echo json_encode($json);
     }
 
+    public function validateSetujui($status, $status_pencairan){
+        if($status =="acc" && $status_pencairan =="sudah"){
+            $validate_data = array(
+                array(
+                    'field' => 'status',
+                    'label' => 'Status Pengajuan',
+                    'rules' => 'required',
+                ),
+                array(
+                    'field' => 'status_pencairan',
+                    'label' => 'Status Pencairan',
+                    'rules' => 'required',
+                ),
+                array(
+                    'field' => 'tgl_pencairan',
+                    'label' => 'Tanggal Pencairan',
+                    'rules' => 'required',
+                ),
+                array(
+                    'field' => 'penerima_uang',
+                    'label' => 'Penerima Pencarian',
+                    'rules' => 'required',
+                ),
+            );
+        }else{
+            $validate_data = array(
+                array(
+                    'field' => 'status',
+                    'label' => 'Status Pengajuan',
+                    'rules' => 'required',
+                ),
+                array(
+                    'field' => 'status_pencairan',
+                    'label' => 'Status Pencairan',
+                    'rules' => 'required',
+                ),
+            );
+        }
+        return $validate_data;
+    }
+
     public function setujuiAction()
     {
         $status = $this->input->post('status');
+        $status_pencairan = $this->input->post('status_pencairan');
         $id = $this->input->post('id');
         $validator = array('success' => false, 'messages' => array());
 
-
-        $validate_data = array(
-            array(
-                'field' => 'status',
-                'label' => 'Status Pengajuan',
-                'rules' => 'required',
-            ),
-            array(
-                'field' => 'status_pencairan',
-                'label' => 'Status Pencairan',
-                'rules' => 'required',
-            ),
-            array(
-                'field' => 'tgl_pengajuan',
-                'label' => 'Tanggal Pengajuan',
-                'rules' => 'required',
-            ),
-            array(
-                'field' => 'penerima_uang',
-                'label' => 'Penerima Pencarian',
-                'rules' => 'required',
-            ),
-        );
-
-
-        $this->form_validation->set_rules($validate_data);
+        $this->form_validation->set_rules($this->validateSetujui($status, $status_pencairan));
         $this->form_validation->set_error_delimiters('<p class="text-danger" style="font-size: 12px; font-weight: 500;">', '</p>');
         if ($this->form_validation->run() === true) {
             $save = $this->pengajuan_model->updatePengajuan($id);
@@ -294,7 +311,7 @@ class Pengajuan extends MY_Controller {
                 $validator['messages'] = "Data berhasil disimpan";
             } else {
                 $validator['success'] = false;
-                $validator['messages'] = "Error while inserting the information into the database";
+                $validator['messages'] = "Error while delete the information into the database";
             }
         }else{
             $validator['success'] = false;

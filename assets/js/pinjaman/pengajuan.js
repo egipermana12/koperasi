@@ -35,29 +35,29 @@ accData =  function(){
     if(cek != 1){
         alert_error('Harus Pilih Satu Data');
     }
-    // console.log(idPilih);
+        loading();
+        var formData = new FormData();
+        formData.append('id', idPilih);
+        console.log(idPilih);
+        $.ajax({
+            type: "POST",
+            url: base_url + "Pinjaman/pengajuan/setujui",
+            data: formData,
+            processData: false, // tell jQuery not to process the data
+            contentType: false,
+            success: function(res){
+                clearLoading();
+                $("#tampilModal").html(res);
+                $("#staticBackdrop").modal("show");
+                $("#staticBackdrop").appendTo("body");
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert(
+                    xhr.status + "\n" + xhr.responseText + "\n" + thrownError,
+                    );
+            },
+        });
 
-    loading();
-    var formData = new FormData();
-    formData.append('id', idPilih);
-    $.ajax({
-        type: "POST",
-        url: base_url + "Pinjaman/pengajuan/setujui",
-        data: formData,
-        processData: false, // tell jQuery not to process the data
-        contentType: false,
-        success: function(res){
-            clearLoading();
-            $("#tampilModal").html(res);
-            $("#staticBackdrop").modal("show");
-            $("#staticBackdrop").appendTo("body");
-        },
-        error: function (xhr, ajaxOptions, thrownError) {
-            alert(
-                xhr.status + "\n" + xhr.responseText + "\n" + thrownError,
-                );
-        },
-    });
 }
 
 hapusData = function()
